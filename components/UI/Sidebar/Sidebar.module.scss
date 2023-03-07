@@ -1,0 +1,30 @@
+@import "../../../scss/variables";
+.sidebar {
+    width: fit-content;
+    background-color: $gray;
+    height: fit-content;
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        li {
+            padding: 0.4rem;
+            margin: 0;
+            font-size: 1.3rem;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
+.sidebar__bars {
+    font-size: 2rem;
+    &:hover {
+        cursor: pointer;
+    }
+}
+@media screen and (max-width: 625px) {
+    .sidebar {
+        grid-column: 1 / 4;
+    }
+}

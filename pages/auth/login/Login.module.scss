@@ -1,0 +1,14 @@
+@import "../../../scss/variables";
+.login {
+    button,
+    h1,
+    label {
+        margin: 0.5rem;
+    }
+    label {
+        font-size: 1.2rem;
+    }
+}
+.login__options {
+    margin-left: 0.5rem;
+}

@@ -1,0 +1,9 @@
+@import "../../../scss/variables";
+.input {
+    margin: 0.5rem;
+    font-size: 1.1rem;
+    outline: none;
+}
+.invalid {
+    border: 1px solid $canceled-theme;
+}
