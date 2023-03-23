@@ -1,0 +1,21 @@
+@import "../../../scss/variables";
+.context-menu {
+    position: absolute;
+    top: 50px;
+    background-color: $lighter-dark-blue;
+    right: 20px;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        li {
+            padding: 0.5rem;
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+    }
+}

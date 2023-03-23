@@ -11,13 +11,15 @@
     flex-grow: 3;
     display: flex;
     justify-content: right;
-    input {
-        background-color: $dark-blue;
-        outline: none;
-        border: 1px solid gray;
-        color: white;
-        margin: 0;
-        width: 30%;
+    .layout__banner_search {
+        input {
+            background-color: $dark-blue;
+            outline: none;
+            border: 1px solid gray;
+            color: white;
+            margin: 0;
+            width: 100%;
+        }
     }
 }
 .layout__banner_logo {
@@ -28,22 +30,45 @@
         margin-left: 0.5rem;
     }
 }
+.layout__banner__actions-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+    background-color: $dark-blue;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+.layout__banner__actions-user:hover {
+    cursor: pointer;
+    border: 1px solid gray;
+}
 .layout__main__content {
     background-color: $dark-blue;
     color: white;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 .layout__main {
-    display: grid;
-    grid-template-columns: 20% 80%;
+    width: 100%;
 }
 .layout__banner__wrapper {
     display: flex;
     justify-content: right;
 }
+.layout__banner_search__btn {
+    margin-right: 1rem;
+}
 @media screen and (max-width: 768px) {
     .layout__banner_search {
-        input {
-            width: 60%;
+        .layout__banner_search {
+            input {
+                width: 60%;
+            }
         }
     }
 }

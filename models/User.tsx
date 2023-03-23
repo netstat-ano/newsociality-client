@@ -2,6 +2,8 @@ import axios, { AxiosError } from "axios";
 interface UserData {
     userId?: string;
     token?: string;
+    avatarUrl?: string;
+    username?: string;
 }
 interface UserDataResponse extends UserData {
     ok: boolean;
@@ -23,14 +25,12 @@ class User {
             });
             return result.data as UserDataResponse;
         } catch (err) {
-            if (err instanceof AxiosError) {
-                return err.response!.data as UserDataResponse;
-            }
             return {
                 ok: false,
                 message: "Unknown error",
                 userId: undefined,
                 token: undefined,
+                username: undefined,
             } as UserDataResponse;
         }
     }
@@ -44,24 +44,31 @@ class User {
             });
             return result.data as UserDataResponse;
         } catch (err) {
-            if (err instanceof AxiosError) {
-                return err.response!.data as UserDataResponse;
-            }
             return {
                 ok: false,
                 message: "Unknown error",
                 userId: undefined,
                 token: undefined,
+                avatarUrl: undefined,
+                username: undefined,
             } as UserDataResponse;
         }
     }
-    static saveToLocalstorage(userId: string, token: string, hours: number) {
+    static saveToLocalstorage(
+        userId: string,
+        token: string,
+        avatarUrl: string,
+        hours: number,
+        username: string
+    ) {
+        localStorage.setItem("username", `${username}`);
         localStorage.setItem("userId", `${userId}`);
         localStorage.setItem("token", `${token}`);
         localStorage.setItem(
             "expire",
             `${new Date().getTime() + hours * 60 * 60 * 1000}`
         );
+        localStorage.setItem("avatarUrl", `${avatarUrl}`);
     }
     static getFromLocalstorage() {
         const expirationTime = new Date(
@@ -72,17 +79,21 @@ class User {
             return {
                 userId: undefined,
                 token: undefined,
+                avatarUrl: undefined,
             } as UserData;
         }
         return {
             userId: localStorage.getItem("userId"),
             token: localStorage.getItem("token"),
+            avatarUrl: localStorage.getItem("avatarUrl"),
+            username: localStorage.getItem("username"),
         } as UserData;
     }
     static clearLocalstorage() {
         localStorage.removeItem("userId");
         localStorage.removeItem("token");
         localStorage.removeItem("expire");
+        localStorage.removeItem("avatarUrl");
     }
 }
 export default User;

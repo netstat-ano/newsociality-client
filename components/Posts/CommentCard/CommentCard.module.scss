@@ -1,0 +1,14 @@
+.comment-card {
+    display: grid;
+    grid-template-columns: 5% 95%;
+    margin-bottom: 1rem;
+}
+.comment-card__user__avatar {
+    margin-right: 1rem;
+}
+.comment-card__text {
+    margin-left: 1rem;
+}
+.comment-card__user_date {
+    color: #6c757d;
+}

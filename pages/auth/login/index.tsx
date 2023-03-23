@@ -34,16 +34,26 @@ const LoginPage: NextPage = () => {
                 userActions.login({
                     userId: result.userId,
                     token: result.token,
+                    avatarUrl: result.avatarUrl,
+                    username: result.username,
                 })
             );
             if (checkboxRef.current?.checked) {
                 User.saveToLocalstorage(
                     result.userId!,
                     result.token!,
-                    24 * 365 * 10
+                    result.avatarUrl!,
+                    24 * 365 * 10,
+                    result.username!
                 );
             } else {
-                User.saveToLocalstorage(result.userId!, result.token!, 1);
+                User.saveToLocalstorage(
+                    result.userId!,
+                    result.token!,
+                    result.avatarUrl!,
+                    1,
+                    result.username!
+                );
             }
             router.replace("/");
         } else {

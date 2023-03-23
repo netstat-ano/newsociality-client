@@ -1,0 +1,40 @@
+@import "../../../scss/variables";
+.post-creator {
+    padding: 1rem;
+
+    width: 400px;
+}
+.post-creator__img {
+    img {
+        margin: 0.5rem;
+    }
+}
+.post-creator__btn {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: right;
+    margin-right: 2rem;
+}
+.post-creator__attachment {
+    margin-left: 0.5rem;
+    svg {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+.post-creator__attachmnet__reset {
+    color: $canceled-theme;
+    margin-left: 0.5rem;
+}
+.post-creator__attachmnet__filename {
+    margin-left: 0.5rem;
+}
+@media screen and (max-width: 425px) {
+    .post-creator {
+        width: 300px;
+        textarea {
+            width: 200px;
+        }
+    }
+}

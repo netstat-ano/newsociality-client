@@ -1,6 +1,6 @@
 import styles from "./BlueButton.module.scss";
 const BlueButton: React.FC<{
-    children: string;
+    children: string | JSX.Element;
     className?: string;
     button?: {};
 }> = (props) => {

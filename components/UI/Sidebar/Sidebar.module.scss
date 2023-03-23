@@ -1,6 +1,9 @@
 @import "../../../scss/variables";
 .sidebar {
     width: fit-content;
+    position: absolute;
+    left: 0;
+    top: 45px;
     background-color: $gray;
     height: fit-content;
     ul {

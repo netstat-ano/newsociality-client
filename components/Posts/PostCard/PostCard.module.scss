@@ -1,0 +1,19 @@
+.post-card__text {
+    white-space: pre-wrap;
+}
+.post-card {
+    margin-top: 0.5rem;
+    width: 30%;
+}
+.post-card__user {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+}
+.post-card__user-data__date {
+    font-size: 1rem;
+    color: #6c757d;
+}
+.post-card__user-data {
+    display: grid;
+    grid-template-columns: 80% 20%;
+}

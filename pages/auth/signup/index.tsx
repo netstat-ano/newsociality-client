@@ -29,9 +29,17 @@ const SignupPage: NextPage = () => {
                 userActions.login({
                     userId: result.userId,
                     token: result.token,
+                    avatarUrl: result.avatarUrl,
+                    username: result.username,
                 })
             );
-            User.saveToLocalstorage(result.userId!, result.token!, 1);
+            User.saveToLocalstorage(
+                result.userId!,
+                result.token!,
+                result.avatarUrl!,
+                1,
+                result.username!
+            );
             router.replace("/");
         } else {
             setAlertText(result.message);
