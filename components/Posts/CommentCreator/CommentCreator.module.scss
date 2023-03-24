@@ -1,3 +1,4 @@
+@import "../../../scss/variables";
 .comment-creator__textarea {
     width: 100%;
 }
@@ -6,4 +7,19 @@
 }
 .comment-creator__btn {
     margin: 0.5rem;
+}
+.comment-creator__attachment {
+    margin-left: 0.5rem;
+    svg {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+.comment-creator__attachmnet__reset {
+    color: $canceled-theme;
+    margin-left: 0.5rem;
+}
+.comment-creator__attachmnet__filename {
+    margin-left: 0.5rem;
 }

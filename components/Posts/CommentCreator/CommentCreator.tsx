@@ -3,14 +3,17 @@ import styles from "./CommentCreator.module.scss";
 import Textarea from "../../UI/Textarea/Textarea";
 import Card from "../../UI/Card/Card";
 import SuccessButton from "../../UI/SuccessButton/SuccessButton";
-import { useFormik } from "formik";
+import { FormikBag, FormikHelpers, useFormik } from "formik";
 import InputErrorMessage from "../../UI/InputErrorMessage/InputErrorMessage";
 import { FormikErrors } from "formik";
 import { CommentResponse } from "../../../models/Post";
 import { useAppSelector } from "../../../store";
 import useAlert from "../../../hooks/use-alert";
+import { useState, useRef } from "react";
 import ModalPortal from "../../Modal/Modal";
 import Comment from "../../../models/Comment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperclip, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 interface FormValues {
     commentText: string;
 }
@@ -24,13 +27,35 @@ const CommentCreator: React.FC<{
     const token = useAppSelector((state) => state.user.token);
     const userId = useAppSelector((state) => state.user.userId);
     const username = useAppSelector((state) => state.user.username);
-    const onSubmitHandler = async (values: FormValues) => {
-        const comment = new Comment(userId!, values.commentText, props.postId);
+    const [filename, setFilename] = useState("");
+    const inputAttachmentRef = useRef<HTMLInputElement>(null);
+    const onSubmitHandler = async (
+        values: FormValues,
+        actions: FormikHelpers<FormValues>
+    ) => {
+        if (
+            inputAttachmentRef.current?.files &&
+            inputAttachmentRef.current?.files.length > 0
+        ) {
+            var comment = new Comment(
+                userId!,
+                values.commentText,
+                props.postId,
+                inputAttachmentRef.current?.files[0]
+            );
+        } else {
+            var comment = new Comment(
+                userId!,
+                values.commentText,
+                props.postId
+            );
+        }
         const result = await comment.save(token!);
         if (!result.ok) {
             setAlertText(result.message);
             stop();
         } else {
+            actions.resetForm();
             props.setComments((prevState) => {
                 return [
                     ...prevState,
@@ -41,11 +66,26 @@ const CommentCreator: React.FC<{
                             avatarUrl: avatarUrl!,
                         },
                         commentText: comment.commentText,
-                        createdAt: new Date().getTime().toString(),
+                        createdAt: result.addedComment!.createdAt,
+                        updatedAt: result.addedComment!.updatedAt,
+                        _id: result.addedComment!._id,
+                        imageUrl: result.addedComment?.imageUrl,
                     },
                 ];
             });
         }
+    };
+    const onAttachmentInputHandler = (e: React.FormEvent<HTMLInputElement>) => {
+        const tgt = e.target as HTMLInputElement;
+
+        if (tgt.files && tgt.files.length > 0) {
+            setFilename(tgt.files[0].name);
+        }
+    };
+
+    const onAttachmentReset = () => {
+        inputAttachmentRef.current!.value = "";
+        setFilename("");
     };
     const onValidateHandler = async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
@@ -96,7 +136,38 @@ const CommentCreator: React.FC<{
                             />
                         )}
                 </div>
-
+                <div className={styles["comment-creator__attachment"]}>
+                    <label htmlFor="comment-attachment">
+                        <FontAwesomeIcon icon={faPaperclip} />
+                    </label>
+                    <input
+                        ref={inputAttachmentRef}
+                        style={{ display: "none" }}
+                        accept="image/*"
+                        onInput={onAttachmentInputHandler}
+                        type="file"
+                        id="comment-attachment"
+                    ></input>
+                    <span
+                        className={
+                            styles["comment-creator__attachmnet__filename"]
+                        }
+                    >
+                        {filename}
+                    </span>
+                    {filename && (
+                        <span
+                            className={
+                                styles["comment-creator__attachmnet__reset"]
+                            }
+                        >
+                            <FontAwesomeIcon
+                                onClick={onAttachmentReset}
+                                icon={faXmarkCircle}
+                            />
+                        </span>
+                    )}
+                </div>
                 <div className={styles["comment-creator__btn"]}>
                     <SuccessButton button={{ type: "submit" }}>
                         Dodaj komentarz

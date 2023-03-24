@@ -4,14 +4,21 @@ import Avatar from "../../User/Avatar/Avatar";
 import { useEffect, useState } from "react";
 import styles from "./PostCard.module.scss";
 import Link from "next/link";
+import Post from "../../../models/Post";
 import PostImage from "../PostImage/PostImage";
 import CommentsSection from "../CommentsSection/CommentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faPlus } from "@fortawesome/free-solid-svg-icons";
-import formatDate from "../../../utils/FormatDate";
+import formatDate from "../../../utils/formatDate";
+import { useAppSelector } from "../../../store";
+import useAlert from "../../../hooks/use-alert";
+import ModalPortal from "../../Modal/Modal";
 const PostCard: React.FC<{ post: PostData }> = (props) => {
     const [formattedDate, setFormattedDate] = useState("");
     const [isCommentsShowed, setIsCommentsShowed] = useState(false);
+    const [likes, setLikes] = useState(props.post.likes);
+    const [alert, setAlert, stop] = useAlert(2000);
+    const token = useAppSelector((state) => state.user.token);
     const onToggleCommentsHandler = () => {
         setIsCommentsShowed((prevState) => !prevState);
     };
@@ -21,9 +28,21 @@ const PostCard: React.FC<{ post: PostData }> = (props) => {
             setFormattedDate(date);
         }
     }, []);
+    const onLikeHandler = async () => {
+        const result = await Post.like(props.post._id, token!);
+        if (result.ok) {
+            setLikes(result.likes);
+        } else {
+            setAlert(result.message);
+            stop();
+        }
+    };
     return (
         <Card className={styles["post-card"]}>
             <>
+                {alert && (
+                    <ModalPortal colorsScheme="error">{alert}</ModalPortal>
+                )}
                 <div className={styles["post-card__user"]}>
                     <div className="center">
                         <Avatar
@@ -36,8 +55,11 @@ const PostCard: React.FC<{ post: PostData }> = (props) => {
                                 "Użytkownik usunięty"}{" "}
                         </div>
                         <div>
-                            <FontAwesomeIcon icon={faPlus} />
-                            {props.post.likes ? props.post.likes : 0}
+                            <FontAwesomeIcon
+                                icon={faPlus}
+                                onClick={onLikeHandler}
+                            />
+                            {likes ? likes : 0}
                         </div>
                         <div className={styles["post-card__user-data__date"]}>
                             {formattedDate}

@@ -28,7 +28,9 @@ const CommentsSection: React.FC<{
                 />
             )}
             {comments &&
-                comments.map((comment) => <CommentCard comment={comment} />)}
+                comments.map((comment) => (
+                    <CommentCard key={comment._id} comment={comment} />
+                ))}
         </div>
     );
 };

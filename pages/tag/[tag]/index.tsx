@@ -25,6 +25,12 @@ export const getServerSideProps = async (
 ) => {
     if (req.query.tag) {
         const fetchedData = await Post.getPostsByTag(String(req.query.tag));
+        if (!fetchedData.ok) {
+            return {
+                notFound: true,
+            };
+        }
+
         return {
             props: {
                 fetchedData,

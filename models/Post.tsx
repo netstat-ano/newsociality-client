@@ -9,6 +9,8 @@ export interface CommentResponse {
     commentText: string;
     createdAt?: string;
     updatedAt?: string;
+    _id?: string;
+    imageUrl?: string;
 }
 export interface PostData {
     userId: {
@@ -29,6 +31,9 @@ export interface PostResponse {
     ok: boolean;
     message: string;
     posts: PostData[];
+}
+export interface LikeResponse extends ResponseApi {
+    likes: number;
 }
 class Post {
     declare userId: string;
@@ -76,24 +81,31 @@ class Post {
             });
             return result.data as PostResponse;
         } catch (err) {
-            return {
-                ok: false,
-                message: "Unknown error",
-                posts: [
-                    {
-                        _id: "",
-                        userId: {
+            if (err instanceof AxiosError) {
+                return {
+                    ...err.response!.data,
+                } as PostResponse;
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error",
+                    posts: [
+                        {
                             _id: "",
-                            username: "",
+                            userId: {
+                                _id: "",
+                                username: "",
+                            },
+                            postText: "",
+                            imgUrl: "",
+                            tags: [],
                         },
-                        postText: "",
-                        imgUrl: "",
-                        tags: [],
-                    },
-                ],
-            } as PostResponse;
+                    ],
+                } as PostResponse;
+            }
         }
     }
+
     static async getCommentsByPostId(id: string) {
         try {
             const result = await axios.post(
@@ -108,11 +120,46 @@ class Post {
                 comments: CommentResponse[];
             };
         } catch (err) {
-            return {
-                ok: false,
-                message: "Unknown error",
-                comments: [] as CommentResponse[],
-            };
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response!.data.message,
+                    comments: [],
+                };
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    comments: [] as CommentResponse[],
+                };
+            }
+        }
+    }
+    static async like(id: string, token: string) {
+        try {
+            const result = await axios.post(
+                "/posts/like-post",
+                { id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return result.data as LikeResponse;
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response!.data.message,
+                } as LikeResponse;
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    likes: 0,
+                } as LikeResponse;
+            }
         }
     }
 }

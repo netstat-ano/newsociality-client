@@ -44,14 +44,20 @@ class User {
             });
             return result.data as UserDataResponse;
         } catch (err) {
-            return {
-                ok: false,
-                message: "Unknown error",
-                userId: undefined,
-                token: undefined,
-                avatarUrl: undefined,
-                username: undefined,
-            } as UserDataResponse;
+            if (err instanceof AxiosError) {
+                return {
+                    ...err.response!.data,
+                } as UserDataResponse;
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error",
+                    userId: undefined,
+                    token: undefined,
+                    avatarUrl: undefined,
+                    username: undefined,
+                } as UserDataResponse;
+            }
         }
     }
     static saveToLocalstorage(

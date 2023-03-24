@@ -11,6 +11,7 @@ import User from "../../../models/User";
 import { useAppDispatch } from "../../../store";
 import { userActions } from "../../../store/user";
 import useAlert from "../../../hooks/use-alert";
+import ModalPortal from "../../../components/Modal/Modal";
 interface FormValues {
     email: string;
     password: string;
@@ -89,6 +90,11 @@ const SignupPage: NextPage = () => {
         <Wrapper>
             <Card className={styles["signup"]}>
                 <>
+                    {alertText && (
+                        <ModalPortal colorsScheme="error">
+                            {alertText}
+                        </ModalPortal>
+                    )}
                     <Head>
                         <title>Rejestracja</title>
                     </Head>
