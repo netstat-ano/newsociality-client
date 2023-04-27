@@ -1,4 +1,3 @@
-import { PostData } from "../../../models/Post";
 import Card from "../../UI/Card/Card";
 import Avatar from "../../User/Avatar/Avatar";
 import { useEffect, useState } from "react";
@@ -13,25 +12,55 @@ import formatDate from "../../../utils/formatDate";
 import { useAppSelector } from "../../../store";
 import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
-const PostCard: React.FC<{ post: PostData }> = (props) => {
+import PostDB from "../../../models/PostDB";
+import Likes from "../../UI/Likes/Likes";
+const PostCard: React.FC<{ post: PostDB }> = (props) => {
     const [formattedDate, setFormattedDate] = useState("");
     const [isCommentsShowed, setIsCommentsShowed] = useState(false);
     const [likes, setLikes] = useState(props.post.likes);
     const [alert, setAlert, stop] = useAlert(2000);
+    const [likeStatus, setLikeStatus] = useState(false);
+    const [post, setPost] = useState<PostDB>(
+        new PostDB(
+            props.post.userId,
+            props.post._id,
+            props.post.createdAt,
+            props.post.updatedAt,
+            props.post.postText,
+            props.post.tags,
+            props.post.imgUrl,
+            props.post.likes,
+            props.post.comments
+        )
+    );
     const token = useAppSelector((state) => state.user.token);
+
     const onToggleCommentsHandler = () => {
         setIsCommentsShowed((prevState) => !prevState);
     };
     useEffect(() => {
-        if (props.post.createdAt) {
-            const date = formatDate(props.post.createdAt);
-            setFormattedDate(date);
-        }
+        const preparePost = async () => {
+            if (props.post.createdAt) {
+                const date = formatDate(props.post.createdAt);
+
+                const result = await post.checkLikeStatus(token!);
+                if (result.ok) {
+                    setLikeStatus(true);
+                }
+                setFormattedDate(date);
+            }
+        };
+        preparePost();
     }, []);
     const onLikeHandler = async () => {
-        const result = await Post.like(props.post._id, token!);
+        const result = await post.like(token!);
         if (result.ok) {
             setLikes(result.likes);
+            if (result.message === "LIKED") {
+                setLikeStatus(true);
+            } else if (result.message === "DISLIKED") {
+                setLikeStatus(false);
+            }
         } else {
             setAlert(result.message);
             stop();
@@ -54,16 +83,11 @@ const PostCard: React.FC<{ post: PostData }> = (props) => {
                             {props.post.userId.username ||
                                 "Użytkownik usunięty"}{" "}
                         </div>
-                        <div>
-                            <FontAwesomeIcon
-                                icon={faPlus}
-                                onClick={onLikeHandler}
-                            />
-                            {likes ? likes : 0}
-                        </div>
-                        <div className={styles["post-card__user-data__date"]}>
-                            {formattedDate}
-                        </div>
+                        <Likes
+                            onLikeHandler={onLikeHandler}
+                            likes={likes}
+                            likeStatus={likeStatus}
+                        />
                     </div>
                 </div>
                 <div className={styles["post-card__text"]}>

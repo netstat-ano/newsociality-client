@@ -21,6 +21,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
     const userId = useAppSelector((state) => state.user.userId);
     const userAvatar = useAppSelector((state) => state.user.avatarUrl);
     const [isMenuToggled, setIsMenuToggled] = useState(false);
+    const [loginStatus, setLoginStatus] = useState(false);
     const router = useRouter();
     const dispatch = useAppDispatch();
     useEffect(() => {
@@ -34,6 +35,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                     username: user.username,
                 })
             );
+            setLoginStatus(true);
         }
     }, []);
     const onLogoutHandler = () => {
@@ -117,7 +119,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
             <div className={styles["layout__main"]}>
                 <Sidebar />
                 <div className={styles["layout__main__content"]}>
-                    {props.children}
+                    {loginStatus && props.children}
                 </div>
             </div>
         </>

@@ -57,6 +57,8 @@ const LoginPage: NextPage = () => {
             }
             router.replace("/");
         } else {
+            console.log(result.message);
+
             setAlertText(result.message);
             stop();
         }
@@ -124,7 +126,9 @@ const LoginPage: NextPage = () => {
                                 Nie wylogowuj mnie
                             </label>
                         </div>
-                        <SuccessButton>Zaloguj się</SuccessButton>
+                        <SuccessButton button={{ type: "submit" }}>
+                            Zaloguj się
+                        </SuccessButton>
                     </form>
                 </>
             </Card>

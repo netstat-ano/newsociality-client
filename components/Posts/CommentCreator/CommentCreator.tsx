@@ -6,7 +6,7 @@ import SuccessButton from "../../UI/SuccessButton/SuccessButton";
 import { FormikBag, FormikHelpers, useFormik } from "formik";
 import InputErrorMessage from "../../UI/InputErrorMessage/InputErrorMessage";
 import { FormikErrors } from "formik";
-import { CommentResponse } from "../../../models/Post";
+import CommentDB from "../../../models/CommentDB";
 import { useAppSelector } from "../../../store";
 import useAlert from "../../../hooks/use-alert";
 import { useState, useRef } from "react";
@@ -19,8 +19,8 @@ interface FormValues {
 }
 const CommentCreator: React.FC<{
     postId: string;
-    setComments: React.Dispatch<React.SetStateAction<CommentResponse[]>>;
-    comments?: CommentResponse[];
+    setComments: React.Dispatch<React.SetStateAction<CommentDB[]>>;
+    comments?: CommentDB[];
 }> = (props) => {
     const [alertText, setAlertText, stop] = useAlert(2000);
     const avatarUrl = useAppSelector((state) => state.user.avatarUrl);
@@ -55,6 +55,8 @@ const CommentCreator: React.FC<{
             setAlertText(result.message);
             stop();
         } else {
+            inputAttachmentRef.current!.value = "";
+            setFilename("");
             actions.resetForm();
             props.setComments((prevState) => {
                 return [

@@ -1,14 +1,8 @@
 import axios, { AxiosError } from "axios";
 import ResponseApi from "../interfaces/ResponseApi";
+import CommentDB from "./CommentDB";
 interface FreshComment extends ResponseApi {
-    addedComment?: {
-        userId: string;
-        commentText: string;
-        _id: string;
-        createdAt: string;
-        updatedAt: string;
-        imageUrl?: string;
-    };
+    addedComment?: CommentDB;
 }
 class Comment {
     declare userId: string;

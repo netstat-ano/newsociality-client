@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Post from "../../../models/Post";
-import { PostResponse } from "../../../models/Post";
+import PostDB from "../../../models/PostDB";
+import { PostData } from "../../../models/PostDB";
 import PostCard from "../../../components/Posts/PostCard/PostCard";
 import { NextApiRequest, NextApiResponse } from "next";
-const TagPosts: NextPage<{ fetchedData: PostResponse }> = (props) => {
+const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
     return (
         <>
             {!props.fetchedData && <h1>Nie znaleziono wpisów</h1>}
@@ -24,7 +24,7 @@ export const getServerSideProps = async (
     res: NextApiResponse
 ) => {
     if (req.query.tag) {
-        const fetchedData = await Post.getPostsByTag(String(req.query.tag));
+        const fetchedData = await PostDB.getPostsByTag(String(req.query.tag));
         if (!fetchedData.ok) {
             return {
                 notFound: true,

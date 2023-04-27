@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import Post, { CommentResponse } from "../../../models/Post";
+import PostDB from "../../../models/PostDB";
 import { useAppSelector } from "../../../store";
 import CommentCard from "../CommentCard/CommentCard";
 import CommentCreator from "../CommentCreator/CommentCreator";
+import CommentDB from "../../../models/CommentDB";
 const CommentsSection: React.FC<{
     postId: string;
 }> = (props) => {
     const userId = useAppSelector((state) => state.user.userId);
-    const [comments, setComments] = useState<CommentResponse[]>([]);
+    const [comments, setComments] = useState<CommentDB[]>([]);
     useEffect(() => {
         const fetchComments = async () => {
-            const fetchedComments = await Post.getCommentsByPostId(
+            const fetchedComments = await PostDB.getCommentsByPostId(
                 props.postId
             );
             if (fetchedComments.ok) {
@@ -29,7 +30,11 @@ const CommentsSection: React.FC<{
             )}
             {comments &&
                 comments.map((comment) => (
-                    <CommentCard key={comment._id} comment={comment} />
+                    <CommentCard
+                        key={comment._id}
+                        comment={comment}
+                        postId={props.postId}
+                    />
                 ))}
         </div>
     );

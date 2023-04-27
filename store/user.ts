@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 export interface UserData {
     userId?: string;
@@ -6,7 +6,6 @@ export interface UserData {
     avatarUrl?: string;
     username?: string;
 }
-
 const user = createSlice({
     name: "user",
     initialState: {
@@ -29,7 +28,6 @@ const user = createSlice({
         },
     },
 });
-
 export const userActions = user.actions;
 
 export default user;

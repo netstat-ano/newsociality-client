@@ -1,0 +1,16 @@
+@import "../../../scss/variables";
+.post-card__likes__liked {
+    color: green;
+}
+.post-card__likes__disliked {
+    color: red;
+}
+.post-card__likes {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: $lighter-dark-blue;
+    &:hover {
+        cursor: pointer;
+    }
+}

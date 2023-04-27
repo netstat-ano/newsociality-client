@@ -1,3 +1,4 @@
+@import "../../../scss/variables";
 .post-card__text {
     white-space: pre-wrap;
 }
@@ -16,4 +17,19 @@
 .post-card__user-data {
     display: grid;
     grid-template-columns: 80% 20%;
+}
+.post-card__likes__liked {
+    color: green;
+}
+.post-card__likes__disliked {
+    color: red;
+}
+.post-card__likes {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: $lighter-dark-blue;
+    &:hover {
+        cursor: pointer;
+    }
 }
