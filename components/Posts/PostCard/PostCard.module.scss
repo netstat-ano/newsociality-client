@@ -33,3 +33,8 @@
         cursor: pointer;
     }
 }
+@media screen and (max-width: 425px) {
+    .post-card {
+        width: 100%;
+    }
+}

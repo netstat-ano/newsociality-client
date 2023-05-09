@@ -7,6 +7,7 @@ export interface LikeResponse extends ResponseApi {
 }
 export interface PostData extends ResponseApi {
     posts: PostDB[];
+    lastPage: boolean;
 }
 export interface LikeResponse extends ResponseApi {
     likes: number;
@@ -70,10 +71,14 @@ class PostDB {
             }
         }
     }
-    static async getPostsByTag(tag: string) {
+    static async getPostsByTag(tag: string, page?: string) {
+        if (!page) {
+            page = "0";
+        }
         try {
             const result = await axios.post("/posts/fetch-posts-by-tag", {
                 tag,
+                page,
             });
             return result.data as PostData;
         } catch (err) {
@@ -83,6 +88,7 @@ class PostDB {
                         posts: [],
                         ok: false,
                         message: "Post not founded",
+                        lastPage: true,
                     }),
                 } as PostData;
             } else {
@@ -101,6 +107,48 @@ class PostDB {
                             tags: [],
                         },
                     ],
+                    lastPage: false,
+                } as PostData;
+            }
+        }
+    }
+    static async getPopularPosts(popularTime: Date, page?: string) {
+        if (!page) {
+            page = "0";
+        }
+        try {
+            const result = await axios.post("/posts/fetch-popular-posts", {
+                page,
+                popularTime,
+            });
+            return result.data as PostData;
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ...(err.response?.data || {
+                        posts: [],
+                        ok: false,
+                        message: "Post not founded",
+                        lastPage: true,
+                    }),
+                } as PostData;
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error",
+                    posts: [
+                        {
+                            _id: "",
+                            userId: {
+                                _id: "",
+                                username: "",
+                            },
+                            postText: "",
+                            imgUrl: "",
+                            tags: [],
+                        },
+                    ],
+                    lastPage: false,
                 } as PostData;
             }
         }

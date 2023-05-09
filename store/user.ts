@@ -26,6 +26,11 @@ const user = createSlice({
             state.avatarUrl = undefined;
             state.username = undefined;
         },
+        changeAvatar(state, action: PayloadAction<{ avatar: string }>) {
+            state.avatarUrl = action.payload.avatar;
+            localStorage.removeItem("avatarUrl");
+            localStorage.setItem("avatarUrl", action.payload.avatar);
+        },
     },
 });
 export const userActions = user.actions;

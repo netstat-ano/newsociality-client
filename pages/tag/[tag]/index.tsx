@@ -1,6 +1,5 @@
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import Pagination from "../../../components/UI/Pagination/Pagination";
 import PostDB from "../../../models/PostDB";
 import { PostData } from "../../../models/PostDB";
 import PostCard from "../../../components/Posts/PostCard/PostCard";
@@ -14,6 +13,7 @@ const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
                 props.fetchedData.posts.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))}
+            <Pagination lastPage={props.fetchedData.lastPage} />
         </>
     );
 };
@@ -24,7 +24,10 @@ export const getServerSideProps = async (
     res: NextApiResponse
 ) => {
     if (req.query.tag) {
-        const fetchedData = await PostDB.getPostsByTag(String(req.query.tag));
+        const fetchedData = await PostDB.getPostsByTag(
+            String(req.query.tag),
+            String(req.query.page)
+        );
         if (!fetchedData.ok) {
             return {
                 notFound: true,

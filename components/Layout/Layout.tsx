@@ -25,6 +25,9 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     useEffect(() => {
+        setIsMenuToggled(false);
+    }, [router.route]);
+    useEffect(() => {
         const user = User.getFromLocalstorage();
         if (user.token && user.userId) {
             dispatch(
@@ -47,7 +50,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
         setIsMenuToggled((prevState) => !prevState);
     };
     const onSubmitHandler = (values: FormValues) => {
-        router.push(`/tag/${values.searchingValue}`);
+        router.push(`/tag/${values.searchingValue}?page=0`);
     };
     const formik = useFormik({
         initialValues: {
@@ -68,7 +71,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                         <BlueButton
                             className={styles["layout__banner_search__btn"]}
                         >
-                            <Link href="/posts?trending=6h">Wpisy</Link>
+                            <Link href="/posts?trending=6">Wpisy</Link>
                         </BlueButton>
                         <form
                             className={styles["layout__banner_search__form"]}
@@ -110,6 +113,9 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                     {isMenuToggled && (
                         <ContextMenu>
                             <>
+                                <li>
+                                    <Link href="/settings">Ustawienia</Link>
+                                </li>
                                 <li onClick={onLogoutHandler}>Wyloguj się</li>
                             </>
                         </ContextMenu>

@@ -82,6 +82,11 @@ const PostCard: React.FC<{ post: PostDB }> = (props) => {
                         <div>
                             {props.post.userId.username ||
                                 "Użytkownik usunięty"}{" "}
+                            <div
+                                className={styles["post-card__user-data__date"]}
+                            >
+                                {formattedDate}
+                            </div>
                         </div>
                         <Likes
                             onLikeHandler={onLikeHandler}

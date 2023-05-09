@@ -24,3 +24,6 @@ a {
 * {
     box-sizing: border-box;
 }
+.display-none {
+    display: none;
+}

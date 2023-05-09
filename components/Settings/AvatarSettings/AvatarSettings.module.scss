@@ -1,0 +1,12 @@
+.avatar-settings__change-avatar-btn {
+    text-decoration: underline;
+    font-size: 1.3rem;
+    &:hover {
+        cursor: pointer;
+    }
+}
+.avatar-settings__avatar-url {
+    img {
+        max-width: 400px;
+    }
+}
