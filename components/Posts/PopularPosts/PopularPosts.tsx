@@ -5,6 +5,7 @@ import PostCard from "../PostCard/PostCard";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Wrapper from "../../UI/Wrapper/Wrapper";
+import Pagination from "../../UI/Pagination/Pagination";
 
 const subtractHours = (date: Date, hours: number) => {
     date.setHours(date.getHours() - hours);
@@ -14,7 +15,7 @@ const subtractHours = (date: Date, hours: number) => {
 const PopularPosts: React.FC<{}> = () => {
     const router = useRouter();
     const [posts, setPosts] = useState<PostDB[]>([]);
-
+    const [isLastPage, setIsLastPage] = useState<boolean>(false);
     useEffect(() => {
         const fetchPosts = async () => {
             let popularTime;
@@ -26,8 +27,12 @@ const PopularPosts: React.FC<{}> = () => {
             } else {
                 popularTime = subtractHours(new Date(), 6);
             }
-            console.log(router.query);
-            const result = await PostDB.getPopularPosts(popularTime);
+            const result = await PostDB.getPopularPosts(
+                popularTime,
+                String(router.query.page)
+            );
+            console.log(result);
+            setIsLastPage(result.lastPage);
             setPosts(result.posts);
         };
         fetchPosts();
@@ -41,7 +46,7 @@ const PopularPosts: React.FC<{}> = () => {
                             ? styles["popular-posts__links-active"]
                             : ""
                     }
-                    href={"/posts?trending=6"}
+                    href={"/posts?trending=6&page=0"}
                 >
                     Gorące 6h
                 </Link>{" "}
@@ -51,7 +56,7 @@ const PopularPosts: React.FC<{}> = () => {
                             ? styles["popular-posts__links-active"]
                             : ""
                     }
-                    href={"/posts?trending=12"}
+                    href={"/posts?trending=12&page=0"}
                 >
                     Gorące 12h
                 </Link>{" "}
@@ -61,15 +66,16 @@ const PopularPosts: React.FC<{}> = () => {
                             ? styles["popular-posts__links-active"]
                             : ""
                     }
-                    href={"/posts?trending=24"}
+                    href={"/posts?trending=24&page=0"}
                 >
                     Gorące 24h
                 </Link>{" "}
             </div>
 
             {posts.map((post) => (
-                <PostCard post={post} />
+                <PostCard key={post._id} post={post} />
             ))}
+            {posts && <Pagination lastPage={isLastPage} />}
         </>
     );
 };

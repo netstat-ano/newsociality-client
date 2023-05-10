@@ -1,6 +1,12 @@
 import axios, { AxiosError } from "axios";
 import ResponseApi from "../interfaces/ResponseApi";
 
+interface PostSaveResponse {
+    ok: boolean;
+    message: string;
+    postId: string;
+}
+
 class Post {
     declare userId: string;
     declare postText: string;
@@ -32,12 +38,13 @@ class Post {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            return result.data as ResponseApi;
+            return result.data as PostSaveResponse;
         } catch (err) {
             return {
                 ok: false,
                 message: "Unknown error",
-            } as ResponseApi;
+                postId: "",
+            } as PostSaveResponse;
         }
     }
 }

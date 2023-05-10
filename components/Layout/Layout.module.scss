@@ -7,20 +7,21 @@
     width: 100%;
     background-color: $gray;
 }
+@media screen and (max-width: 600px) {
+    .layout__banner {
+        grid-template-columns: 100%;
+    }
+    .layout__banner * {
+        padding: 0.2 !important;
+    }
+    .layout__banner_search input {
+        width: 70%;
+    }
+}
 .layout__banner_search {
     flex-grow: 3;
     display: flex;
     justify-content: right;
-    .layout__banner_search {
-        input {
-            background-color: $dark-blue;
-            outline: none;
-            border: 1px solid gray;
-            color: white;
-            margin: 0;
-            width: 100%;
-        }
-    }
 }
 .layout__banner_logo {
     font-size: 1.5rem;

@@ -210,5 +210,31 @@ class PostDB {
             }
         }
     }
+    static async getPostById(id: string) {
+        try {
+            const result = await axios.post("/posts/fetch-post-by-id", {
+                id,
+            });
+            return result.data as {
+                ok: boolean;
+                message: string;
+                post: PostDB;
+            };
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response?.data.message || "Not founded",
+                    post: {} as PostDB,
+                };
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    post: {} as PostDB,
+                };
+            }
+        }
+    }
 }
 export default PostDB;

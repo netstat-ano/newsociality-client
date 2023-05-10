@@ -4,9 +4,11 @@ import PostDB from "../../../models/PostDB";
 import { PostData } from "../../../models/PostDB";
 import PostCard from "../../../components/Posts/PostCard/PostCard";
 import { NextApiRequest, NextApiResponse } from "next";
+import PostCreator from "../../../components/Posts/PostCreator/PostCreator";
 const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
     return (
         <>
+            <PostCreator />
             {!props.fetchedData && <h1>Nie znaleziono wpisów</h1>}
             {props.fetchedData &&
                 props.fetchedData.posts &&

@@ -13,6 +13,7 @@ import Post from "../../../models/Post";
 import { useAppSelector } from "../../../store";
 import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
+import { useRouter } from "next/router";
 interface FormValues {
     postText: string;
 }
@@ -20,6 +21,7 @@ const PostCreator: React.FC<{}> = () => {
     const [filename, setFilename] = useState("");
     const [alertText, setAlertText, stop] = useAlert(2000);
     const avatarUrl = useAppSelector((state) => state.user.avatarUrl);
+    const router = useRouter();
     const inputAttachmentRef = useRef<HTMLInputElement>(null);
     const token = useAppSelector((state) => state.user.token);
     const userId = useAppSelector((state) => state.user.userId);
@@ -55,6 +57,9 @@ const PostCreator: React.FC<{}> = () => {
             }
         }
         const result = await post.save(token!);
+        if (result.ok) {
+            router.push(`/post/${result.postId}`);
+        }
         if (!result.ok) {
             setAlertText(result.message);
             stop();
@@ -62,7 +67,6 @@ const PostCreator: React.FC<{}> = () => {
     };
     const onValidateHandler = async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
-        console.log("validate");
 
         if (values.postText.trim().length < 8) {
             errors.postText = "Wpis musi zawierać conajmniej 8 znaków.";

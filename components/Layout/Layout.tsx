@@ -71,7 +71,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                         <BlueButton
                             className={styles["layout__banner_search__btn"]}
                         >
-                            <Link href="/posts?trending=6">Wpisy</Link>
+                            <Link href="/posts?trending=6&page=0">Wpisy</Link>
                         </BlueButton>
                         <form
                             className={styles["layout__banner_search__form"]}
@@ -123,9 +123,8 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                 </div>
             </header>
             <div className={styles["layout__main"]}>
-                <Sidebar />
                 <div className={styles["layout__main__content"]}>
-                    {loginStatus && props.children}
+                    {props.children}
                 </div>
             </div>
         </>

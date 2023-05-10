@@ -7,19 +7,28 @@ import Post from "../../../models/Post";
 import PostImage from "../PostImage/PostImage";
 import CommentsSection from "../CommentsSection/CommentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+    faComment,
+    faUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import formatDate from "../../../utils/formatDate";
 import { useAppSelector } from "../../../store";
 import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
-const PostCard: React.FC<{ post: PostDB }> = (props) => {
+import { useRouter } from "next/router";
+const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
+    props
+) => {
     const [formattedDate, setFormattedDate] = useState("");
-    const [isCommentsShowed, setIsCommentsShowed] = useState(false);
+    const [isCommentsShowed, setIsCommentsShowed] = useState(
+        props.commentsDefaultShowed ? true : false
+    );
     const [likes, setLikes] = useState(props.post.likes);
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
+    const router = useRouter();
     const [post, setPost] = useState<PostDB>(
         new PostDB(
             props.post.userId,
@@ -93,6 +102,9 @@ const PostCard: React.FC<{ post: PostDB }> = (props) => {
                             likes={likes}
                             likeStatus={likeStatus}
                         />
+                        <Link href={`/post/${post._id}`}>
+                            <FontAwesomeIcon icon={faUpRightFromSquare} />
+                        </Link>
                     </div>
                 </div>
                 <div className={styles["post-card__text"]}>
@@ -127,13 +139,15 @@ const PostCard: React.FC<{ post: PostDB }> = (props) => {
                         )}
                     </div>
                     <div>
-                        <FontAwesomeIcon
-                            onClick={onToggleCommentsHandler}
-                            icon={faComment}
-                        />
+                        {!props.commentsDefaultShowed && (
+                            <FontAwesomeIcon
+                                onClick={onToggleCommentsHandler}
+                                icon={faComment}
+                            />
+                        )}
                     </div>
                 </div>
-                {isCommentsShowed && (
+                {(isCommentsShowed || props.commentsDefaultShowed) && (
                     <CommentsSection postId={props.post._id} />
                 )}
             </>
