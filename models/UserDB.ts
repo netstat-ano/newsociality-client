@@ -5,6 +5,9 @@ import ResponseApi from "../interfaces/ResponseApi";
 interface ChangeAvatarResponse extends ResponseApi {
     path: string;
 }
+interface FetchedUserResponse extends ResponseApi {
+    user: UserDB;
+}
 class UserDB {
     declare _id: string;
     declare username: string;
@@ -41,6 +44,28 @@ class UserDB {
                     message: "Unknown error.",
                     path: "",
                 } as ChangeAvatarResponse;
+            }
+        }
+    }
+    static async getUserById(id: string) {
+        try {
+            const result = await axios.post("/auth/fetch-user-by-id", {
+                userId: id,
+            });
+            return result.data as FetchedUserResponse;
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: "",
+                    user: {},
+                } as FetchedUserResponse;
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    user: {},
+                } as FetchedUserResponse;
             }
         }
     }

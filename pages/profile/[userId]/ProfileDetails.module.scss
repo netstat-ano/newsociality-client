@@ -1,0 +1,31 @@
+.profile-details {
+    display: grid;
+    width: 100%;
+    grid: 1fr 1fr;
+    img {
+        width: 50%;
+    }
+}
+.profile-details__userinfo {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.profile-details-userinfo__avatar {
+    text-align: center;
+}
+.profile-details__tab {
+    text-align: center;
+    font-size: 1.5rem;
+}
+.active {
+    text-decoration: underline;
+}
+.profile-details__content {
+    margin-top: 2rem;
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -89,8 +89,10 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                     </div>
                     <div className={styles["post-card__user-data"]}>
                         <div>
-                            {props.post.userId.username ||
-                                "Użytkownik usunięty"}{" "}
+                            <Link href={`/profile/${props.post.userId._id}`}>
+                                {props.post.userId.username ||
+                                    "Użytkownik usunięty"}{" "}
+                            </Link>
                             <div
                                 className={styles["post-card__user-data__date"]}
                             >

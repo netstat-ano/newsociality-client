@@ -236,5 +236,71 @@ class PostDB {
             }
         }
     }
+    static async getPostsByUserId(id: string, page?: string) {
+        if (!page) {
+            page = "0";
+        }
+        try {
+            const result = await axios.post("/posts/fetch-posts-by-user-id", {
+                id,
+                page,
+            });
+            return result.data as {
+                ok: boolean;
+                message: string;
+                posts: PostDB[];
+                lastPage: boolean;
+            };
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response?.data.message || "Not founded",
+                    posts: [] as PostDB[],
+                    lastPage: true,
+                };
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    posts: [] as PostDB[],
+                    lastPage: true,
+                };
+            }
+        }
+    }
+    static async getPostsLikedByUserId(id: string, page?: string) {
+        try {
+            const result = await axios.post(
+                "/posts/fetch-liked-posts-by-user-id",
+                {
+                    id,
+                    page: page,
+                }
+            );
+            return result.data as {
+                ok: boolean;
+                message: string;
+                posts: PostDB[];
+                lastPage: boolean;
+            };
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response?.data.message || "Not founded",
+                    posts: [] as PostDB[],
+                    lastPage: true,
+                };
+            } else {
+                return {
+                    ok: false,
+                    message: "Unknown error.",
+                    posts: [] as PostDB[],
+                    lastPage: true,
+                };
+            }
+        }
+    }
 }
 export default PostDB;

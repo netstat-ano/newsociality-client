@@ -114,6 +114,11 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                         <ContextMenu>
                             <>
                                 <li>
+                                    <Link href={`/profile/${userId}`}>
+                                        Mój profil
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link href="/settings">Ustawienia</Link>
                                 </li>
                                 <li onClick={onLogoutHandler}>Wyloguj się</li>
