@@ -29,6 +29,18 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
     const router = useRouter();
+    const text = props.post.postText.split("\r");
+    const parsedText: string[] = [];
+    const postText: string[] = [];
+    for (let element of text) {
+        let newElement = `${element}\r`;
+        parsedText.push(newElement);
+    }
+    for (let element of parsedText) {
+        let newElement = element.split(" ");
+        postText.push(...newElement);
+    }
+    console.log(postText);
     const [post, setPost] = useState<PostDB>(
         new PostDB(
             props.post.userId,
@@ -110,10 +122,10 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                     </div>
                 </div>
                 <div className={styles["post-card__text"]}>
-                    {props.post.postText.split(" ").map((word) => {
+                    {postText.map((word) => {
                         const regexp =
                             /(\s#[A-z0-9]\w+\s)|(\s#[A-z0-9]\w+)|(#[A-z0-9]\w+\s)|(#[A-z0-9]\w+)/g;
-                        if (word.includes("#")) {
+                        if (word.trim()[0] === "#") {
                             const tags = [
                                 ...Array.from(
                                     word.matchAll(regexp),
@@ -124,7 +136,7 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                             for (let tag of tags) {
                                 const formattedTag = tag.replace("#", "");
                                 jsxElements.push(
-                                    <Link href={`/tag/${formattedTag}`}>
+                                    <Link href={`/tag/${formattedTag}?page=0`}>
                                         {tag}{" "}
                                     </Link>
                                 );

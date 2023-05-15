@@ -4,6 +4,7 @@ interface UserData {
     token?: string;
     avatarUrl?: string;
     username?: string;
+    expire?: string;
 }
 interface UserDataResponse extends UserData {
     ok: boolean;
@@ -77,22 +78,12 @@ class User {
         localStorage.setItem("avatarUrl", `${avatarUrl}`);
     }
     static getFromLocalstorage() {
-        const expirationTime = new Date(
-            String(localStorage.getItem("expire"))
-        ).getTime();
-        if (expirationTime > new Date().getTime()) {
-            User.clearLocalstorage();
-            return {
-                userId: undefined,
-                token: undefined,
-                avatarUrl: undefined,
-            } as UserData;
-        }
         return {
             userId: localStorage.getItem("userId"),
             token: localStorage.getItem("token"),
             avatarUrl: localStorage.getItem("avatarUrl"),
             username: localStorage.getItem("username"),
+            expire: localStorage.getItem("expire"),
         } as UserData;
     }
     static clearLocalstorage() {
@@ -100,6 +91,7 @@ class User {
         localStorage.removeItem("token");
         localStorage.removeItem("expire");
         localStorage.removeItem("avatarUrl");
+        localStorage.removeItem("username");
     }
 }
 export default User;

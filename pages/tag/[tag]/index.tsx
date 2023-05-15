@@ -15,7 +15,10 @@ const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
                 props.fetchedData.posts.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))}
-            <Pagination lastPage={props.fetchedData.lastPage} />
+            {props.fetchedData.posts.length === 40 &&
+                !props.fetchedData.lastPage && (
+                    <Pagination lastPage={props.fetchedData.lastPage} />
+                )}
         </>
     );
 };

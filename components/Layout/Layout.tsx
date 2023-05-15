@@ -29,7 +29,19 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
     }, [router.route]);
     useEffect(() => {
         const user = User.getFromLocalstorage();
+        if (
+            user.expire &&
+            new Date(Number(user.expire)).getTime() - new Date().getTime() < 0
+        ) {
+            User.clearLocalstorage();
+            dispatch(userActions.logout());
+            return;
+        }
         if (user.token && user.userId) {
+            setTimeout(() => {
+                User.clearLocalstorage();
+                dispatch(userActions.logout());
+            }, new Date(Number(user.expire)).getTime() - new Date().getTime());
             dispatch(
                 userActions.login({
                     userId: user.userId,
@@ -71,8 +83,16 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                         <BlueButton
                             className={styles["layout__banner_search__btn"]}
                         >
+                            <Link href="/news?trending=6&page=0">
+                                Wiadomości
+                            </Link>
+                        </BlueButton>
+                        <BlueButton
+                            className={styles["layout__banner_search__btn"]}
+                        >
                             <Link href="/posts?trending=6&page=0">Wpisy</Link>
                         </BlueButton>
+
                         <form
                             className={styles["layout__banner_search__form"]}
                             onSubmit={formik.handleSubmit}
