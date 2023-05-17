@@ -40,7 +40,6 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
         let newElement = element.split(" ");
         postText.push(...newElement);
     }
-    console.log(postText);
     const [post, setPost] = useState<PostDB>(
         new PostDB(
             props.post.userId,
@@ -63,10 +62,11 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
         const preparePost = async () => {
             if (props.post.createdAt) {
                 const date = formatDate(props.post.createdAt);
-
-                const result = await post.checkLikeStatus(token!);
-                if (result.ok) {
-                    setLikeStatus(true);
+                if (token) {
+                    const result = await post.checkLikeStatus(token!);
+                    if (result.ok) {
+                        setLikeStatus(true);
+                    }
                 }
                 setFormattedDate(date);
             }
@@ -126,23 +126,17 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                         const regexp =
                             /(\s#[A-z0-9]\w+\s)|(\s#[A-z0-9]\w+)|(#[A-z0-9]\w+\s)|(#[A-z0-9]\w+)/g;
                         if (word.trim()[0] === "#") {
-                            const tags = [
-                                ...Array.from(
-                                    word.matchAll(regexp),
-                                    (tag) => tag[0]
-                                ),
-                            ];
-                            const jsxElements = [];
-                            for (let tag of tags) {
-                                const formattedTag = tag.replace("#", "");
-                                jsxElements.push(
+                            const tag = word.match(regexp);
+                            let jsxElement;
+                            if (tag) {
+                                const formattedTag = tag[0].replace("#", "");
+                                jsxElement = (
                                     <Link href={`/tag/${formattedTag}?page=0`}>
                                         {tag}{" "}
                                     </Link>
                                 );
                             }
-
-                            return jsxElements.map((tag) => tag);
+                            return jsxElement;
                         } else {
                             return `${word} `;
                         }

@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
-import PostDB from "../../../models/PostDB";
-import styles from "./PopularPosts.module.scss";
-import PostCard from "../PostCard/PostCard";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import Pagination from "../../UI/Pagination/Pagination";
+import { useState } from "react";
+import PostCard from "../../Posts/PostCard/PostCard";
+import { useEffect } from "react";
 import TrendingSwitch from "../../TrendingSwitch/TrendingSwitch";
-
-export const subtractHours = (date: Date, hours: number) => {
-    date.setHours(date.getHours() - hours);
-    return date;
-};
-
-const PopularPosts: React.FC<{}> = () => {
+import Pagination from "../../UI/Pagination/Pagination";
+import { subtractHours } from "../../Posts/PopularPosts/PopularPosts";
+import NewsDB from "../../../models/NewsDB";
+const PopularNews: React.FC<{}> = () => {
     const router = useRouter();
-    const [posts, setPosts] = useState<PostDB[]>([]);
+    const [posts, setNews] = useState<NewsDB[]>([]);
     const [isLastPage, setIsLastPage] = useState<boolean>(false);
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchNews = async () => {
             let popularTime;
             if (router.query.trending) {
                 popularTime = subtractHours(
@@ -27,26 +21,27 @@ const PopularPosts: React.FC<{}> = () => {
             } else {
                 popularTime = subtractHours(new Date(), 6);
             }
-            const result = await PostDB.getPopularPosts(
+            const result = await NewsDB.getPopularNews(
                 popularTime,
                 String(router.query.page)
             );
+            console.log(result);
             setIsLastPage(result.lastPage);
-            setPosts(result.posts);
+            setNews(result.news);
         };
-        fetchPosts();
+        fetchNews();
     }, [router.query.trending]);
     return (
         <>
             <TrendingSwitch />
 
-            {posts.map((post) => (
+            {/* {posts.map((post) => (
                 <PostCard key={post._id} post={post} />
             ))}
             {posts.length === 40 && !isLastPage && (
                 <Pagination lastPage={isLastPage} />
-            )}
+            )} */}
         </>
     );
 };
-export default PopularPosts;
+export default PopularNews;
