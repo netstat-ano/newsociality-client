@@ -17,6 +17,7 @@ class NewsDB {
     declare tags: string[] | never[];
     declare likes?: number;
     declare comments?: CommentDB[];
+    declare title: string;
     constructor(
         userId: UserDB,
         _id: string,
@@ -25,6 +26,7 @@ class NewsDB {
         newsUrl: string,
         newsDecription: string,
         tags: string[] | never[],
+        title: string,
         likes?: number,
         comments?: CommentDB[]
     ) {
@@ -37,6 +39,7 @@ class NewsDB {
         this.tags = tags;
         this.likes = likes;
         this.comments = comments;
+        this.title = title;
     }
     static async getPopularNews(popularTime: Date, page?: string) {
         if (!page) {

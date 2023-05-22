@@ -20,7 +20,7 @@ export const getServerSideProps = async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const result = await PostDB.getPostById(String(req.query.postId));
+    const result = await PostDB.getPostById(String(req.query.postId), "post");
     if (result.ok) {
         return {
             props: { post: result.post },

@@ -11,15 +11,18 @@ import InputErrorMessage from "../../UI/InputErrorMessage/InputErrorMessage";
 import SuccessButton from "../../UI/SuccessButton/SuccessButton";
 import News from "../../../models/News";
 import useAlert from "../../../hooks/use-alert";
+import { useRouter } from "next/router";
 interface FormValues {
     newsDescription: string;
     newsUrl: string;
+    newsTitle: string;
 }
 const NewsCreator: React.FC<{}> = () => {
     const avatarUrl = useAppSelector((state) => state.user.avatarUrl);
     const userId = useAppSelector((state) => state.user.userId);
     const token = useAppSelector((state) => state.user.token);
     const [alertText, setAlertText, stop] = useAlert(2000);
+    const router = useRouter();
     const onValidateHandler = async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
 
@@ -31,6 +34,9 @@ const NewsCreator: React.FC<{}> = () => {
         );
         if (!values.newsUrl.match(regexp)) {
             errors.newsUrl = "Nieprawidłowy adres URL.";
+        }
+        if (values.newsTitle.trim().length < 8) {
+            errors.newsTitle = "Tytuł musi zawierać conajmniej 8 znaków.";
         }
         return errors;
     };
@@ -47,18 +53,22 @@ const NewsCreator: React.FC<{}> = () => {
             userId!,
             values.newsDescription,
             values.newsUrl,
-            tags
+            tags,
+            values.newsTitle
         );
         const result = await news.save(token!);
         if (!result.ok) {
             setAlertText(result.message);
             stop();
+        } else {
+            router.push(`/news/${result.newsId}`);
         }
     };
     const formik = useFormik({
         initialValues: {
             newsDescription: "",
             newsUrl: "",
+            newsTitle: "",
         },
         onSubmit: onSubmitHandler,
         validate: onValidateHandler,
@@ -89,6 +99,22 @@ const NewsCreator: React.FC<{}> = () => {
                     ></Input>
                     {formik.errors.newsUrl && formik.touched.newsUrl && (
                         <InputErrorMessage message={formik.errors.newsUrl} />
+                    )}
+                    <Input
+                        input={{
+                            placeholder: "Tytuł",
+                            value: formik.values.newsTitle,
+                            onChange: formik.handleChange,
+                            onBlur: formik.handleBlur,
+                            id: "newsTitle",
+                            name: "newsTitle",
+                        }}
+                        invalid={Boolean(
+                            formik.errors.newsTitle && formik.touched.newsTitle
+                        )}
+                    ></Input>
+                    {formik.errors.newsTitle && formik.touched.newsTitle && (
+                        <InputErrorMessage message={formik.errors.newsTitle} />
                     )}
                     <Textarea
                         textarea={{

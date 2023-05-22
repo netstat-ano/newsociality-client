@@ -17,22 +17,29 @@ class PostDB {
     declare _id: string;
     declare createdAt: string;
     declare updatedAt: string;
-    declare postText: string;
+    declare postText?: string;
+    declare newsDescription?: string;
+    declare newsTitle?: string;
+    declare newsUrl?: string;
     declare imgUrl?: string;
     declare tags: string[] | never[];
     declare likes?: number;
     declare comments?: CommentDB[];
+    declare isNews?: boolean;
 
     constructor(
         userId: UserDB,
         _id: string,
         createdAt: string,
         updatedAt: string,
-        postText: string,
         tags: string[] | never[],
+        postText?: string,
         imgUrl?: string,
         likes?: number,
-        comments?: CommentDB[]
+        comments?: CommentDB[],
+        newsDescription?: string,
+        newsUrl?: string,
+        newsTitle?: string
     ) {
         this.userId = userId;
         this._id = _id;
@@ -43,6 +50,9 @@ class PostDB {
         this.tags = tags;
         this.likes = likes;
         this.comments = comments;
+        this.newsDescription = newsDescription;
+        this.newsUrl = newsUrl;
+        this.newsTitle = newsTitle;
     }
     async like(token: string) {
         try {
@@ -71,7 +81,7 @@ class PostDB {
             }
         }
     }
-    static async getPostsByTag(tag: string, page?: string) {
+    static async getPostsByTag(tag: string, page?: string, type?: string) {
         if (!page) {
             page = "0";
         }
@@ -79,6 +89,7 @@ class PostDB {
             const result = await axios.post("/posts/fetch-posts-by-tag", {
                 tag,
                 page,
+                type,
             });
             return result.data as PostData;
         } catch (err) {
@@ -112,7 +123,11 @@ class PostDB {
             }
         }
     }
-    static async getPopularPosts(popularTime: Date, page?: string) {
+    static async getPopularPosts(
+        popularTime: Date,
+        type: string,
+        page?: string
+    ) {
         if (!page) {
             page = "0";
         }
@@ -120,6 +135,7 @@ class PostDB {
             const result = await axios.post("/posts/fetch-popular-posts", {
                 page,
                 popularTime,
+                type,
             });
             return result.data as PostData;
         } catch (err) {
@@ -210,10 +226,11 @@ class PostDB {
             }
         }
     }
-    static async getPostById(id: string) {
+    static async getPostById(id: string, type: string) {
         try {
             const result = await axios.post("/posts/fetch-post-by-id", {
                 id,
+                type,
             });
             return result.data as {
                 ok: boolean;
@@ -269,13 +286,18 @@ class PostDB {
             }
         }
     }
-    static async getPostsLikedByUserId(id: string, page?: string) {
+    static async getPostsLikedByUserId(
+        id: string,
+        page?: string,
+        type?: string
+    ) {
         try {
             const result = await axios.post(
                 "/posts/fetch-liked-posts-by-user-id",
                 {
                     id,
                     page: page,
+                    type,
                 }
             );
             return result.data as {

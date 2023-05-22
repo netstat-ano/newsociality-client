@@ -29,6 +29,7 @@ const PopularPosts: React.FC<{}> = () => {
             }
             const result = await PostDB.getPopularPosts(
                 popularTime,
+                "post",
                 String(router.query.page)
             );
             setIsLastPage(result.lastPage);

@@ -105,6 +105,7 @@ const PostCreator: React.FC<{}> = () => {
                 <div>
                     <Textarea
                         textarea={{
+                            placeholder: "Treść wpisu...",
                             rows: "8",
                             cols: "30",
                             className: styles["post-creator__textarea"],

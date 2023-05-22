@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import PostCard from "../../Posts/PostCard/PostCard";
+import NewsCard from "../NewsCard/NewsCard";
 import { useEffect } from "react";
 import TrendingSwitch from "../../TrendingSwitch/TrendingSwitch";
 import Pagination from "../../UI/Pagination/Pagination";
 import { subtractHours } from "../../Posts/PopularPosts/PopularPosts";
-import NewsDB from "../../../models/NewsDB";
+import PostDB from "../../../models/PostDB";
 const PopularNews: React.FC<{}> = () => {
     const router = useRouter();
-    const [posts, setNews] = useState<NewsDB[]>([]);
+    const [news, setNews] = useState<PostDB[]>([]);
     const [isLastPage, setIsLastPage] = useState<boolean>(false);
     useEffect(() => {
         const fetchNews = async () => {
@@ -21,13 +21,14 @@ const PopularNews: React.FC<{}> = () => {
             } else {
                 popularTime = subtractHours(new Date(), 6);
             }
-            const result = await NewsDB.getPopularNews(
+            const result = await PostDB.getPopularPosts(
                 popularTime,
+                "news",
                 String(router.query.page)
             );
-            console.log(result);
+
             setIsLastPage(result.lastPage);
-            setNews(result.news);
+            setNews(result.posts);
         };
         fetchNews();
     }, [router.query.trending]);
@@ -35,12 +36,12 @@ const PopularNews: React.FC<{}> = () => {
         <>
             <TrendingSwitch />
 
-            {/* {posts.map((post) => (
-                <PostCard key={post._id} post={post} />
+            {news.map((singleNews) => (
+                <NewsCard key={singleNews._id} news={singleNews} />
             ))}
-            {posts.length === 40 && !isLastPage && (
+            {news.length === 40 && !isLastPage && (
                 <Pagination lastPage={isLastPage} />
-            )} */}
+            )}
         </>
     );
 };

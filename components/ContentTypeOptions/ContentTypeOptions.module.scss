@@ -1,0 +1,10 @@
+@import "../../scss/variables";
+.select {
+    font-size: 1.2rem;
+    outline: none;
+    background-color: $gray;
+    color: white;
+}
+.select-wrapper {
+    margin-top: 1rem;
+}

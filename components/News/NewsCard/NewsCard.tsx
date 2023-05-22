@@ -1,11 +1,10 @@
 import Card from "../../UI/Card/Card";
 import Avatar from "../../User/Avatar/Avatar";
 import { useEffect, useState } from "react";
-import styles from "./PostCard.module.scss";
+import styles from "./NewsCard.module.scss";
 import Link from "next/link";
 import Post from "../../../models/Post";
-import PostImage from "../PostImage/PostImage";
-import CommentsSection from "../CommentsSection/CommentsSection";
+import CommentsSection from "../../Posts/CommentsSection/CommentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faComment,
@@ -18,19 +17,19 @@ import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
 import { useRouter } from "next/router";
-const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
+import axios from "axios";
+const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
-    console.log(props.post);
     const [formattedDate, setFormattedDate] = useState("");
     const [isCommentsShowed, setIsCommentsShowed] = useState(
         props.commentsDefaultShowed ? true : false
     );
-    const [likes, setLikes] = useState(props.post.likes);
+    const [likes, setLikes] = useState(props.news.likes);
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
     const router = useRouter();
-    const text = props.post.postText!.split("\r");
+    const text = props.news.newsDescription!.split("\r");
     const parsedText: string[] = [];
     const postText: string[] = [];
     for (let element of text) {
@@ -41,30 +40,32 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
         let newElement = element.split(" ");
         postText.push(...newElement);
     }
-    const [post, setPost] = useState<PostDB>(
+    const [news, setNews] = useState<PostDB>(
         new PostDB(
-            props.post.userId,
-            props.post._id,
-            props.post.createdAt,
-            props.post.updatedAt,
-            props.post.tags,
-            props.post.postText!,
-            props.post.imgUrl,
-            props.post.likes,
-            props.post.comments
+            props.news.userId,
+            props.news._id,
+            props.news.createdAt,
+            props.news.updatedAt,
+            props.news.tags,
+            undefined,
+            undefined,
+            props.news.likes,
+            props.news.comments,
+            props.news.newsDescription,
+            props.news.newsUrl,
+            props.news.newsTitle
         )
     );
     const token = useAppSelector((state) => state.user.token);
-
     const onToggleCommentsHandler = () => {
         setIsCommentsShowed((prevState) => !prevState);
     };
     useEffect(() => {
         const preparePost = async () => {
-            if (props.post.createdAt) {
-                const date = formatDate(props.post.createdAt);
+            if (props.news.createdAt) {
+                const date = formatDate(props.news.createdAt);
                 if (token) {
-                    const result = await post.checkLikeStatus(token!);
+                    const result = await news.checkLikeStatus(token!);
                     if (result.ok) {
                         setLikeStatus(true);
                     }
@@ -75,7 +76,7 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
         preparePost();
     }, []);
     const onLikeHandler = async () => {
-        const result = await post.like(token!);
+        const result = await news.like(token!);
         if (result.ok) {
             setLikes(result.likes);
             if (result.message === "LIKED") {
@@ -97,13 +98,13 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                 <div className={styles["post-card__user"]}>
                     <div className="center">
                         <Avatar
-                            src={`${process.env.API_URL}/${props.post.userId.avatarUrl}`}
+                            src={`${process.env.API_URL}/${props.news.userId.avatarUrl}`}
                         />
                     </div>
                     <div className={styles["post-card__user-data"]}>
                         <div>
-                            <Link href={`/profile/${props.post.userId._id}`}>
-                                {props.post.userId.username ||
+                            <Link href={`/profile/${props.news.userId._id}`}>
+                                {props.news.userId.username ||
                                     "Użytkownik usunięty"}{" "}
                             </Link>
                             <div
@@ -117,12 +118,20 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                             likes={likes}
                             likeStatus={likeStatus}
                         />
-                        <Link href={`/post/${post._id}`}>
+                        <Link href={`/news/${news._id}`}>
                             <FontAwesomeIcon icon={faUpRightFromSquare} />
                         </Link>
                     </div>
                 </div>
                 <div className={styles["post-card__text"]}>
+                    <div>
+                        <h3>{props.news.newsTitle}</h3>
+                    </div>
+                    <div className={styles["post-card__url"]}>
+                        <a target="_blank" href={props.news.newsUrl!}>
+                            {props.news.newsUrl}
+                        </a>
+                    </div>
                     {postText.map((word) => {
                         const regexp =
                             /(\s#[A-z0-9]\w+\s)|(\s#[A-z0-9]\w+)|(#[A-z0-9]\w+\s)|(#[A-z0-9]\w+)/g;
@@ -142,11 +151,7 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                             return `${word} `;
                         }
                     })}
-                    <div className="center">
-                        {props.post.imgUrl && (
-                            <PostImage src={props.post.imgUrl} />
-                        )}
-                    </div>
+                    <div className="center"></div>
                     <div>
                         {!props.commentsDefaultShowed && (
                             <FontAwesomeIcon
@@ -157,10 +162,10 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                     </div>
                 </div>
                 {(isCommentsShowed || props.commentsDefaultShowed) && (
-                    <CommentsSection postId={props.post._id} />
+                    <CommentsSection postId={props.news._id} />
                 )}
             </>
         </Card>
     );
 };
-export default PostCard;
+export default NewsCard;

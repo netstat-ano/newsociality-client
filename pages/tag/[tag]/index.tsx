@@ -6,14 +6,22 @@ import PostCard from "../../../components/Posts/PostCard/PostCard";
 import { NextApiRequest, NextApiResponse } from "next";
 import PostCreator from "../../../components/Posts/PostCreator/PostCreator";
 import { useAppSelector } from "../../../store";
+import { useRouter } from "next/router";
+import ContentTypeOptions from "../../../components/ContentTypeOptions/ContentTypeOptions";
+import NewsCard from "../../../components/News/NewsCard/NewsCard";
 const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
     const token = useAppSelector((state) => state.user.token);
+    const router = useRouter();
     return (
         <>
             {token && <PostCreator />}
+            <ContentTypeOptions />
             {!props.fetchedData && <h1>Nie znaleziono wpisów</h1>}
-            {props.fetchedData &&
-                props.fetchedData.posts &&
+            {router.query.type === "news" &&
+                props.fetchedData.posts.map((post) => (
+                    <NewsCard key={post._id} news={post} />
+                ))}
+            {router.query.type !== "news" &&
                 props.fetchedData.posts.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))}
@@ -31,10 +39,18 @@ export const getServerSideProps = async (
     res: NextApiResponse
 ) => {
     if (req.query.tag) {
-        const fetchedData = await PostDB.getPostsByTag(
-            String(req.query.tag),
-            String(req.query.page)
-        );
+        if (req.query.type === "news") {
+            var fetchedData = await PostDB.getPostsByTag(
+                String(req.query.tag),
+                String(req.query.page),
+                "news"
+            );
+        } else {
+            var fetchedData = await PostDB.getPostsByTag(
+                String(req.query.tag),
+                String(req.query.page)
+            );
+        }
         if (!fetchedData.ok) {
             return {
                 notFound: true,

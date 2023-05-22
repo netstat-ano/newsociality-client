@@ -25,7 +25,8 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
             } else if (router.query.tab === "liked-posts") {
                 const result = await PostDB.getPostsLikedByUserId(
                     props.user._id,
-                    String(router.query.page)
+                    String(router.query.page),
+                    "posts"
                 );
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
@@ -68,9 +69,11 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                 </Link>
             </div>
             <div className={styles["profile-details__content"]}>
-                {posts.map((post) => (
-                    <PostCard post={post} />
-                ))}
+                {posts.map((post) => {
+                    if (post && !post.isNews) {
+                        return <PostCard key={post._id} post={post} />;
+                    }
+                })}
                 {posts.length > 0 && <Pagination lastPage={isLastPage} />}
             </div>
         </div>

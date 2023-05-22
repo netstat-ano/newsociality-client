@@ -1,0 +1,43 @@
+@import "../../../scss/variables";
+.post-card__text {
+    white-space: pre-wrap;
+}
+.post-card {
+    margin-top: 0.5rem;
+    width: 30%;
+}
+.post-card__user {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+}
+.post-card__user-data__date {
+    font-size: 1rem;
+    color: #6c757d;
+}
+.post-card__user-data {
+    display: grid;
+    grid-template-columns: 70% 20% 10%;
+}
+.post-card__likes__liked {
+    color: green;
+}
+.post-card__likes__disliked {
+    color: red;
+}
+.post-card__likes {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: $lighter-dark-blue;
+    &:hover {
+        cursor: pointer;
+    }
+}
+.post-card__url {
+    margin-bottom: 1rem;
+}
+@media screen and (max-width: 500px) {
+    .post-card {
+        width: 100%;
+    }
+}
