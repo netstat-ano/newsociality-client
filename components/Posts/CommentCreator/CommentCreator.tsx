@@ -72,7 +72,7 @@ const CommentCreator: React.FC<{
                         updatedAt: result.addedComment!.updatedAt,
                         _id: result.addedComment!._id,
                         imageUrl: result.addedComment?.imageUrl,
-                    },
+                    } as CommentDB,
                 ];
             });
         }

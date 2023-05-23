@@ -21,7 +21,6 @@ import { useRouter } from "next/router";
 const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
-    console.log(props.post);
     const [formattedDate, setFormattedDate] = useState("");
     const [isCommentsShowed, setIsCommentsShowed] = useState(
         props.commentsDefaultShowed ? true : false

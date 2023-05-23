@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import PostDB from "../../../models/PostDB";
-import styles from "./PopularPosts.module.scss";
 import PostCard from "../PostCard/PostCard";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import Pagination from "../../UI/Pagination/Pagination";
 import TrendingSwitch from "../../TrendingSwitch/TrendingSwitch";
 

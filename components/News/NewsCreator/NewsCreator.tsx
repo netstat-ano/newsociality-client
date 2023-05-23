@@ -1,5 +1,4 @@
 import Card from "../../UI/Card/Card";
-import { Formik } from "formik";
 import styles from "./NewsCreator.module.scss";
 import ModalPortal from "../../Modal/Modal";
 import Input from "../../UI/Input/Input";

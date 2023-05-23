@@ -253,7 +253,7 @@ class PostDB {
             }
         }
     }
-    static async getPostsByUserId(id: string, page?: string) {
+    static async getPostsByUserId(id: string, page?: string, type?: string) {
         if (!page) {
             page = "0";
         }
@@ -261,6 +261,7 @@ class PostDB {
             const result = await axios.post("/posts/fetch-posts-by-user-id", {
                 id,
                 page,
+                type,
             });
             return result.data as {
                 ok: boolean;

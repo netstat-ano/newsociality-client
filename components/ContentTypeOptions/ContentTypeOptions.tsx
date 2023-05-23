@@ -16,7 +16,7 @@ const ContentTypeOptions: React.FC<{}> = () => {
                 className={styles.select}
             >
                 <option value="posts">Wpisy</option>
-                <option value="news">News</option>
+                <option value="news">Wiadomości</option>
             </select>
         </div>
     );

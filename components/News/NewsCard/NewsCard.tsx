@@ -3,7 +3,6 @@ import Avatar from "../../User/Avatar/Avatar";
 import { useEffect, useState } from "react";
 import styles from "./NewsCard.module.scss";
 import Link from "next/link";
-import Post from "../../../models/Post";
 import CommentsSection from "../../Posts/CommentsSection/CommentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,8 +15,6 @@ import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
-import { useRouter } from "next/router";
-import axios from "axios";
 const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
@@ -28,7 +25,6 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     const [likes, setLikes] = useState(props.news.likes);
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
-    const router = useRouter();
     const text = props.news.newsDescription!.split("\r");
     const parsedText: string[] = [];
     const postText: string[] = [];

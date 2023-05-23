@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import PostDB from "../../../models/PostDB";
 import PostCard from "../../../components/Posts/PostCard/PostCard";
 import Pagination from "../../../components/UI/Pagination/Pagination";
+import NewsCard from "../../../components/News/NewsCard/NewsCard";
 
 const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
     const router = useRouter();
@@ -18,15 +19,27 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
             if (router.query.tab === "posts") {
                 const result = await PostDB.getPostsByUserId(
                     props.user._id,
-                    String(router.query.page)
+                    String(router.query.page),
+                    "posts"
                 );
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
-            } else if (router.query.tab === "liked-posts") {
+            } else if (
+                router.query.tab === "liked-posts" ||
+                router.query.tab === "liked-news"
+            ) {
                 const result = await PostDB.getPostsLikedByUserId(
                     props.user._id,
                     String(router.query.page),
                     "posts"
+                );
+                setPosts(result.posts);
+                setIsLastPage(result.lastPage);
+            } else if (router.query.tab === "news") {
+                const result = await PostDB.getPostsByUserId(
+                    props.user._id,
+                    String(router.query.page),
+                    "news"
                 );
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
@@ -68,12 +81,43 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                     Plusowane wpisy
                 </Link>
             </div>
-            <div className={styles["profile-details__content"]}>
-                {posts.map((post) => {
-                    if (post && !post.isNews) {
-                        return <PostCard key={post._id} post={post} />;
+            <div className={styles["profile-details__tab"]}>
+                <Link
+                    className={
+                        router.query.tab === "news" ? styles["active"] : ""
                     }
-                })}
+                    href={`/profile/${props.user._id}?tab=news&page=0`}
+                >
+                    Moje wiadomości
+                </Link>
+            </div>
+            <div className={styles["profile-details__tab"]}>
+                <Link
+                    className={
+                        router.query.tab === "liked-news"
+                            ? styles["active"]
+                            : ""
+                    }
+                    href={`/profile/${props.user._id}?tab=liked-news&page=0`}
+                >
+                    Plusowane wiadomości
+                </Link>
+            </div>
+            <div className={styles["profile-details__content"]}>
+                {(router.query.tab === "liked-posts" ||
+                    router.query.tab === "posts") &&
+                    posts.map((post) => {
+                        if (!post.isNews) {
+                            return <PostCard key={post._id} post={post} />;
+                        }
+                    })}
+                {(router.query.tab === "liked-news" ||
+                    router.query.tab === "news") &&
+                    posts.map((post) => {
+                        if (post.isNews) {
+                            return <NewsCard key={post._id} news={post} />;
+                        }
+                    })}
                 {posts.length > 0 && <Pagination lastPage={isLastPage} />}
             </div>
         </div>
