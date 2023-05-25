@@ -9,12 +9,17 @@ import { useAppSelector } from "../../../store";
 import { useRouter } from "next/router";
 import ContentTypeOptions from "../../../components/ContentTypeOptions/ContentTypeOptions";
 import NewsCard from "../../../components/News/NewsCard/NewsCard";
+import NewsCreator from "../../../components/News/NewsCreator/NewsCreator";
 const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
     const token = useAppSelector((state) => state.user.token);
     const router = useRouter();
     return (
         <>
-            {token && <PostCreator />}
+            {token &&
+                (router.query.type === "" || router.query.type === "posts") && (
+                    <PostCreator />
+                )}
+            {token && router.query.type === "news" && <NewsCreator />}
             <ContentTypeOptions />
             {!props.fetchedData && <h1>Nie znaleziono wpisów</h1>}
             {router.query.type === "news" &&
