@@ -68,7 +68,7 @@ class CommentDB {
                 }
             );
             return result.data as ResponseApi;
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -77,7 +77,7 @@ class CommentDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                 } as ResponseApi;
             }
         }

@@ -24,7 +24,6 @@ const NewsCreator: React.FC<{}> = () => {
     const router = useRouter();
     const onValidateHandler = async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
-
         if (values.newsDescription.trim().length < 8) {
             errors.newsDescription = "Wpis musi zawierać conajmniej 8 znaków.";
         }

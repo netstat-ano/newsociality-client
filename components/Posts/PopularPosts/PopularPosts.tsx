@@ -30,6 +30,7 @@ const PopularPosts: React.FC<{}> = () => {
                 "post",
                 String(router.query.page)
             );
+
             setIsLastPage(result.lastPage);
             setPosts(result.posts);
         };

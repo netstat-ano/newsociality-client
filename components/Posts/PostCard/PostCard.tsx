@@ -3,7 +3,6 @@ import Avatar from "../../User/Avatar/Avatar";
 import { useEffect, useState } from "react";
 import styles from "./PostCard.module.scss";
 import Link from "next/link";
-import Post from "../../../models/Post";
 import PostImage from "../PostImage/PostImage";
 import CommentsSection from "../CommentsSection/CommentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +16,6 @@ import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
-import { useRouter } from "next/router";
 const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
@@ -28,7 +26,6 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     const [likes, setLikes] = useState(props.post.likes);
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
-    const router = useRouter();
     const text = props.post.postText!.split("\r");
     const parsedText: string[] = [];
     const postText: string[] = [];

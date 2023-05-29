@@ -53,7 +53,7 @@ class UserDB {
                 userId: id,
             });
             return result.data as FetchedUserResponse;
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -63,7 +63,7 @@ class UserDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     user: {},
                 } as FetchedUserResponse;
             }

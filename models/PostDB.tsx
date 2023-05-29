@@ -66,7 +66,7 @@ class PostDB {
                 }
             );
             return result.data as LikeResponse;
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -75,7 +75,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     likes: 0,
                 } as LikeResponse;
             }
@@ -138,7 +138,7 @@ class PostDB {
                 type,
             });
             return result.data as PostData;
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ...(err.response?.data || {
@@ -151,7 +151,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error",
+                    message: err.message,
                     posts: [
                         {
                             _id: "",
@@ -183,7 +183,7 @@ class PostDB {
                 }
             );
             return result.data as ResponseApi;
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -192,7 +192,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                 } as ResponseApi;
             }
         }
@@ -210,7 +210,7 @@ class PostDB {
                 message: string;
                 comments: CommentDB[];
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -220,7 +220,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     comments: [] as CommentDB[],
                 };
             }
@@ -237,7 +237,7 @@ class PostDB {
                 message: string;
                 post: PostDB;
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -247,7 +247,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     post: {} as PostDB,
                 };
             }
@@ -269,7 +269,7 @@ class PostDB {
                 posts: PostDB[];
                 lastPage: boolean;
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -280,7 +280,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     posts: [] as PostDB[],
                     lastPage: true,
                 };
@@ -307,7 +307,7 @@ class PostDB {
                 posts: PostDB[];
                 lastPage: boolean;
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof AxiosError) {
                 return {
                     ok: false,
@@ -318,7 +318,7 @@ class PostDB {
             } else {
                 return {
                     ok: false,
-                    message: "Unknown error.",
+                    message: err.message,
                     posts: [] as PostDB[],
                     lastPage: true,
                 };
