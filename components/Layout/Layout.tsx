@@ -103,10 +103,12 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                                     onChange: formik.handleChange,
                                     onBlur: formik.handleBlur,
                                     name: "searchingValue",
+                                    type: "text",
                                 }}
                                 invalid={false}
                             />
                             <button
+                                data-testid="submit-search"
                                 style={{ display: "none" }}
                                 type="submit"
                             ></button>
@@ -133,7 +135,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                     {isMenuToggled && (
                         <ContextMenu>
                             <>
-                                <li>
+                                <li data-testid="context-menu">
                                     <Link href={`/profile/${userId}`}>
                                         Mój profil
                                     </Link>
@@ -141,7 +143,12 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                                 <li>
                                     <Link href="/settings">Ustawienia</Link>
                                 </li>
-                                <li onClick={onLogoutHandler}>Wyloguj się</li>
+                                <li
+                                    data-testid="logout-btn"
+                                    onClick={onLogoutHandler}
+                                >
+                                    Wyloguj się
+                                </li>
                             </>
                         </ContextMenu>
                     )}

@@ -12,6 +12,7 @@ const ContentTypeOptions: React.FC<{}> = () => {
     return (
         <div className={styles["select-wrapper"]}>
             <select
+                data-testid="select"
                 onChange={onContentTypeChangeHandler}
                 className={styles.select}
             >
