@@ -108,7 +108,7 @@ const CommentCreator: React.FC<{
 
     return (
         <Card className={styles["post-creator"]}>
-            <form onSubmit={formik.handleSubmit}>
+            <form data-testid="comment-creator" onSubmit={formik.handleSubmit}>
                 {alertText && (
                     <ModalPortal colorsScheme="error">{alertText}</ModalPortal>
                 )}

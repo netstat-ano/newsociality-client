@@ -148,7 +148,7 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
                         }
                     })}
                     <div className="center"></div>
-                    <div>
+                    <div data-testid="comments-wrapper">
                         {!props.commentsDefaultShowed && (
                             <FontAwesomeIcon
                                 onClick={onToggleCommentsHandler}

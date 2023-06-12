@@ -21,12 +21,13 @@ const CommentsSection: React.FC<{
                 setComments(fetchedComments.comments);
             } else {
                 setAlertText(fetchedComments.message);
+                stop();
             }
         };
         fetchComments();
     }, []);
     return (
-        <div>
+        <div data-testid="comments-section">
             {alertText && (
                 <ModalPortal colorsScheme="error">{alertText}</ModalPortal>
             )}

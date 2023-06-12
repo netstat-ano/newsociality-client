@@ -55,7 +55,7 @@ const CommentCard: React.FC<{ comment: CommentDB; postId: string }> = (
     };
 
     return (
-        <div className={styles["comment-card"]}>
+        <div data-testid="comment-card" className={styles["comment-card"]}>
             {alert && <ModalPortal colorsScheme="error">{alert}</ModalPortal>}
             <div className={`center ${styles["comment-card__user__avatar"]}`}>
                 <Avatar

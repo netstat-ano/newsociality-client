@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import mockRouter from "next-router-mock";
 import Layout from "./Layout";
-import configureStore from "redux-mock-store";
 import { UserData } from "../../store/user";
 import { renderWithProviders } from "../../utils/testUtils";
 jest.mock("next/router", () => require("next-router-mock"));
@@ -54,5 +53,17 @@ describe("<Layout />", () => {
         const loggingOutBtn = screen.getByTestId("logout-btn");
         await userEvent.click(loggingOutBtn);
         expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    });
+    test("is not showing avatar if it is not logged in", () => {
+        renderWithProviders(
+            <Layout>
+                <></>
+            </Layout>,
+            {
+                preloadedState: { user: {} },
+            }
+        );
+        const img = screen.queryByRole("img");
+        expect(img).not.toBeInTheDocument();
     });
 });

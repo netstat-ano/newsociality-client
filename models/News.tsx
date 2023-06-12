@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-interface SavedNewsResponse {
+export interface SavedNewsResponse {
     ok: boolean;
     message: string;
     newsId: string;
