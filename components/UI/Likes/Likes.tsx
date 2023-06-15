@@ -8,6 +8,7 @@ const Likes: React.FC<{
 }> = (props) => {
     return (
         <div
+            data-testid="like"
             onClick={props.onLikeHandler}
             className={`
     ${styles["post-card__likes"]}

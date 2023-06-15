@@ -143,7 +143,7 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                             <PostImage src={props.post.imgUrl} />
                         )}
                     </div>
-                    <div>
+                    <div data-testid="toggle-comments">
                         {!props.commentsDefaultShowed && (
                             <FontAwesomeIcon
                                 onClick={onToggleCommentsHandler}

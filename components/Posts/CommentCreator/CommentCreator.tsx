@@ -143,6 +143,8 @@ const CommentCreator: React.FC<{
                         <FontAwesomeIcon icon={faPaperclip} />
                     </label>
                     <input
+                        max={1}
+                        data-testid="input-img"
                         ref={inputAttachmentRef}
                         style={{ display: "none" }}
                         accept="image/*"
@@ -159,6 +161,7 @@ const CommentCreator: React.FC<{
                     </span>
                     {filename && (
                         <span
+                            data-testid="reset-wrapper"
                             className={
                                 styles["comment-creator__attachmnet__reset"]
                             }

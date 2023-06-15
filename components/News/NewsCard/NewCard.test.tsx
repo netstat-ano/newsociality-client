@@ -12,7 +12,7 @@ import UserDB from "../../../models/UserDB";
 import CommentDB from "../../../models/CommentDB";
 jest.mock("next/router", () => require("next-router-mock"));
 jest.mock("axios");
-const user = new UserDB("123", "test", "/avatarurl");
+export const user = new UserDB("123", "test", "/avatarurl");
 
 const news = new PostDB(
     user,
@@ -28,12 +28,14 @@ const news = new PostDB(
     "/newsUrl",
     "newsTitle"
 );
-const comment = new CommentDB(
+export const comment = new CommentDB(
     user,
     "testComment",
     new Date().toDateString(),
     new Date().toDateString(),
-    "1234"
+    "1234",
+    "/url",
+    0
 );
 describe("<NewCard />", () => {
     test("is showing info properly", () => {
