@@ -21,7 +21,6 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
     const userId = useAppSelector((state) => state.user.userId);
     const userAvatar = useAppSelector((state) => state.user.avatarUrl);
     const [isMenuToggled, setIsMenuToggled] = useState(false);
-    const [loginStatus, setLoginStatus] = useState(false);
     const router = useRouter();
     const dispatch = useAppDispatch();
     useEffect(() => {
@@ -50,7 +49,6 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                     username: user.username,
                 })
             );
-            setLoginStatus(true);
         }
     }, []);
     const onLogoutHandler = () => {
@@ -62,7 +60,7 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
         setIsMenuToggled((prevState) => !prevState);
     };
     const onSubmitHandler = (values: FormValues) => {
-        router.push(`/tag/${values.searchingValue}?page=0`);
+        router.push(`/tag/${values.searchingValue}?type=posts&page=0`);
     };
     const formik = useFormik({
         initialValues: {
@@ -80,18 +78,20 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                 </div>
                 <div className={styles["layout__banner__wrapper"]}>
                     <div className={styles["layout__banner_search"]}>
-                        <BlueButton
-                            className={styles["layout__banner_search__btn"]}
-                        >
-                            <Link href="/news?trending=6&page=0">
+                        <Link href="/news?trending=6&page=0">
+                            <BlueButton
+                                className={styles["layout__banner_search__btn"]}
+                            >
                                 Wiadomości
-                            </Link>
-                        </BlueButton>
-                        <BlueButton
-                            className={styles["layout__banner_search__btn"]}
-                        >
-                            <Link href="/posts?trending=6&page=0">Wpisy</Link>
-                        </BlueButton>
+                            </BlueButton>
+                        </Link>
+                        <Link href="/posts?trending=6&page=0">
+                            <BlueButton
+                                className={styles["layout__banner_search__btn"]}
+                            >
+                                Wpisy
+                            </BlueButton>
+                        </Link>
 
                         <form
                             className={styles["layout__banner_search__form"]}

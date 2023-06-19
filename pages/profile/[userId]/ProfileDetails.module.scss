@@ -1,9 +1,22 @@
+@import "../../../scss/variables";
 .profile-details {
     display: grid;
     width: 100%;
     grid: 1fr 1fr 1fr 1fr;
     img {
         width: 50%;
+    }
+}
+@media screen and (max-width: 625px) {
+    .profile-details__tab {
+        grid-column: 1 / 5;
+        margin: 1rem;
+        background-color: $purple-theme;
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+    .profile-details__content {
+        width: 100%;
     }
 }
 .profile-details__userinfo {
