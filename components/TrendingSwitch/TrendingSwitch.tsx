@@ -4,7 +4,7 @@ import Link from "next/link";
 const TrendingSwitch: React.FC<{}> = () => {
     const router = useRouter();
     return (
-        <div>
+        <div data-testid="trending-switch">
             {(router.pathname === "/posts" || router.pathname === "/news") && (
                 <Link
                     className={

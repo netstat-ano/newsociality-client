@@ -2,7 +2,7 @@ import PostDB from "../../../models/PostDB";
 import { renderWithProviders } from "../../../utils/testUtils";
 import PostCard from "./PostCard";
 import { screen } from "@testing-library/react";
-import { user } from "../../News/NewsCard/NewCard.test";
+import { user } from "../../News/NewsCard/NewsCard.test";
 import userEvent from "@testing-library/user-event";
 PostDB.prototype.checkLikeStatus = async (token: string) => {
     return Promise.resolve({ ok: true, message: "DISLIKED" });

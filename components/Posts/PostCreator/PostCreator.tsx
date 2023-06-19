@@ -128,6 +128,7 @@ const PostCreator: React.FC<{}> = () => {
                         <FontAwesomeIcon icon={faPaperclip} />
                     </label>
                     <input
+                        data-testid="input-img"
                         ref={inputAttachmentRef}
                         style={{ display: "none" }}
                         accept="image/*"

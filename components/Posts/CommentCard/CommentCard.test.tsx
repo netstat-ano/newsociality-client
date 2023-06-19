@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/testUtils";
 import CommentCard from "./CommentCard";
-import { comment } from "../../News/NewsCard/NewCard.test";
+import { comment } from "../../News/NewsCard/NewsCard.test";
 import CommentDB from "../../../models/CommentDB";
 import { LikeResponse } from "../../../models/PostDB";
 import userEvent from "@testing-library/user-event";
