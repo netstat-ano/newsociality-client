@@ -52,11 +52,16 @@ export const getServerSideProps = async (
                 String(req.query.page),
                 "news"
             );
-        } else {
+        } else if ((req.query.type = "posts")) {
             var fetchedData = await PostDB.getPostsByTag(
                 String(req.query.tag),
-                String(req.query.page)
+                String(req.query.page),
+                "posts"
             );
+        } else {
+            return {
+                notFound: true,
+            };
         }
         if (!fetchedData.ok) {
             return {
