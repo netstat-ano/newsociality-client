@@ -8,6 +8,9 @@ interface ChangeAvatarResponse extends ResponseApi {
 interface FetchedUserResponse extends ResponseApi {
     user: UserDB;
 }
+interface FollowedTagsResponse extends ResponseApi {
+    tags: string[];
+}
 class UserDB {
     declare _id: string;
     declare username: string;
@@ -66,6 +69,34 @@ class UserDB {
                     message: err.message,
                     user: {},
                 } as FetchedUserResponse;
+            }
+        }
+    }
+    static async getFollowedTagsById(token: string, id: string) {
+        try {
+            const result = await axios.post(
+                "/auth/fetch-followed-tags-by-user-id",
+                { userId: id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return result.data as FollowedTagsResponse;
+        } catch (err: any) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: "",
+                    tags: [],
+                } as FollowedTagsResponse;
+            } else {
+                return {
+                    ok: false,
+                    message: err.message,
+                    tags: [],
+                } as FollowedTagsResponse;
             }
         }
     }

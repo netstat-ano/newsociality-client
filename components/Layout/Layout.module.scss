@@ -7,9 +7,9 @@
     width: 100%;
     background-color: $gray;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .layout__banner {
-        grid-template-columns: 100%;
+        grid-template-columns: 1fr;
     }
     .layout__banner * {
         padding: 0.2 !important;
@@ -17,11 +17,6 @@
     .layout__banner_search input {
         width: 70%;
     }
-}
-.layout__banner_search {
-    flex-grow: 3;
-    display: flex;
-    justify-content: right;
 }
 .layout__banner_logo {
     font-size: 1.5rem;
@@ -31,8 +26,12 @@
         margin-left: 0.5rem;
     }
 }
+.layout__banner_search__form {
+    display: inline;
+}
 .layout__banner__actions-user {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-left: 0.5rem;
@@ -67,10 +66,8 @@
 }
 @media screen and (max-width: 768px) {
     .layout__banner_search {
-        .layout__banner_search {
-            input {
-                width: 60%;
-            }
+        input {
+            width: 60%;
         }
     }
 }

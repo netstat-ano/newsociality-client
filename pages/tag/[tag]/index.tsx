@@ -10,11 +10,13 @@ import { useRouter } from "next/router";
 import ContentTypeOptions from "../../../components/ContentTypeOptions/ContentTypeOptions";
 import NewsCard from "../../../components/News/NewsCard/NewsCard";
 import NewsCreator from "../../../components/News/NewsCreator/NewsCreator";
-const TagPosts: NextPage<{ fetchedData: PostData }> = (props) => {
+import TagBanner from "../../../components/Posts/TagBanner/TagBanner";
+const TagPosts: NextPage<{ fetchedData: PostData; tag: string }> = (props) => {
     const token = useAppSelector((state) => state.user.token);
     const router = useRouter();
     return (
         <>
+            {token && <TagBanner tag={props.tag} />}
             {token &&
                 (router.query.type === "" || router.query.type === "posts") && (
                     <PostCreator />
@@ -65,6 +67,7 @@ export const getServerSideProps = async (
         return {
             props: {
                 fetchedData,
+                tag: req.query.tag,
             },
         };
     }

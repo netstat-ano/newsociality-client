@@ -78,6 +78,17 @@ const Layout: React.FC<{ children: JSX.Element }> = (props) => {
                 </div>
                 <div className={styles["layout__banner__wrapper"]}>
                     <div className={styles["layout__banner_search"]}>
+                        {userId && (
+                            <Link href="/fyp?type=posts">
+                                <BlueButton
+                                    className={
+                                        styles["layout__banner_search__btn"]
+                                    }
+                                >
+                                    Moja tablica
+                                </BlueButton>
+                            </Link>
+                        )}
                         <Link href="/news?trending=6&page=0">
                             <BlueButton
                                 className={styles["layout__banner_search__btn"]}

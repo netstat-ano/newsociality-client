@@ -81,7 +81,11 @@ class PostDB {
             }
         }
     }
-    static async getPostsByTag(tag: string, page?: string, type?: string) {
+    static async getPostsByTag(
+        tag: string | string[],
+        page?: string,
+        type?: string
+    ) {
         if (!page) {
             page = "0";
         }
@@ -321,6 +325,37 @@ class PostDB {
                     message: err.message,
                     posts: [] as PostDB[],
                     lastPage: true,
+                };
+            }
+        }
+    }
+    static async followTag(tag: string, token: string) {
+        try {
+            const result = await axios.post(
+                "/posts/follow-tag",
+                {
+                    tag,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return result.data as {
+                ok: boolean;
+                message: string;
+            };
+        } catch (err: any) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response?.data.message || "Not founded",
+                };
+            } else {
+                return {
+                    ok: false,
+                    message: err.message,
                 };
             }
         }
