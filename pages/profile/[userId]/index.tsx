@@ -12,8 +12,8 @@ import NewsCard from "../../../components/News/NewsCard/NewsCard";
 
 const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
     const router = useRouter();
-    const [posts, setPosts] = useState<PostDB[]>([]);
-    const [isLastPage, setIsLastPage] = useState<boolean>(false);
+    const [posts, setPosts] = useState<PostDB[] | undefined>(undefined);
+    const [isLastPage, setIsLastPage] = useState<boolean>(true);
     useEffect(() => {
         const fetchContent = async () => {
             if (router.query.tab === "posts") {
@@ -33,6 +33,7 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                     String(router.query.page),
                     "posts"
                 );
+                console.log(result.posts);
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
             } else if (router.query.tab === "news") {
@@ -44,7 +45,7 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
             } else {
-                setPosts([]);
+                setPosts(undefined);
             }
         };
         fetchContent();
@@ -106,6 +107,7 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
             <div className={styles["profile-details__content"]}>
                 {(router.query.tab === "liked-posts" ||
                     router.query.tab === "posts") &&
+                    posts &&
                     posts.map((post) => {
                         if (!post.isNews) {
                             return <PostCard key={post._id} post={post} />;
@@ -113,12 +115,13 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                     })}
                 {(router.query.tab === "liked-news" ||
                     router.query.tab === "news") &&
+                    posts &&
                     posts.map((post) => {
                         if (post.isNews) {
                             return <NewsCard key={post._id} news={post} />;
                         }
                     })}
-                {posts.length > 0 && <Pagination lastPage={isLastPage} />}
+                {posts && <Pagination lastPage={isLastPage} />}
             </div>
         </div>
     );

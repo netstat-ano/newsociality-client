@@ -20,6 +20,7 @@ const ContentTypeOptions: React.FC<{ beforeAddingParams?: () => void }> = (
                 data-testid="select"
                 onChange={onContentTypeChangeHandler}
                 className={styles.select}
+                value={router.query.type}
             >
                 <option value="posts">Wpisy</option>
                 <option value="news">Wiadomości</option>

@@ -15,7 +15,6 @@ const fypPage: NextPage<{}> = (props) => {
     const user = useAppSelector((state) => state.user);
     const router = useRouter();
     const [alertText, setAlertText, stop] = useAlert(2000);
-    console.log(router.query.type);
     useEffect(() => {
         const fetchPosts = async () => {
             const followedTags = await UserDB.getFollowedTagsById(
@@ -61,7 +60,12 @@ const fypPage: NextPage<{}> = (props) => {
                 fetchedData.posts.map((post) => (
                     <NewsCard key={post._id} news={post} />
                 ))}
-            {fetchedData && <Pagination lastPage={fetchedData.lastPage} />}
+            {fetchedData && fetchedData.posts.length > 0 && (
+                <Pagination lastPage={fetchedData.lastPage} />
+            )}
+            {fetchedData && fetchedData.posts.length === 0 && (
+                <h1>Nie znaleziono żadnych treści.</h1>
+            )}
         </>
     );
 };
