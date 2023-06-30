@@ -33,6 +33,45 @@
         cursor: pointer;
     }
 }
+.delete-post-button {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+.post-card__actions {
+    display: flex;
+    justify-content: space-between;
+}
+.post-card__actions__options {
+    font-size: 1.5rem;
+}
+.post-card__context-menu-show {
+    animation-name: show;
+    animation-duration: 0.5s;
+    display: block;
+}
+.post-card__context-menu-hide {
+    animation-name: hide;
+    animation-duration: 0.5s;
+    opacity: 0;
+}
+@keyframes show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes hide {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 @media screen and (max-width: 500px) {
     .post-card {
         width: 100%;

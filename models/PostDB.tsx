@@ -81,6 +81,32 @@ class PostDB {
             }
         }
     }
+    async delete(token: string) {
+        try {
+            const result = await axios.post(
+                "/posts/delete-post",
+                { id: this._id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return result.data as ResponseApi;
+        } catch (err: any) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: err.response!.data.message,
+                } as ResponseApi;
+            } else {
+                return {
+                    ok: false,
+                    message: err.message,
+                } as ResponseApi;
+            }
+        }
+    }
     static async getPostsByTag(
         tag: string | string[],
         page?: string,

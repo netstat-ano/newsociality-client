@@ -1,9 +1,9 @@
 @import "../../../scss/variables";
 .context-menu {
     position: absolute;
-    top: 50px;
+    margin-right: 2.5rem;
+    margin-top: 0.5rem;
     background-color: $lighter-dark-blue;
-    right: 20px;
     padding: 0.5rem;
     border-radius: 1rem;
     ul {
