@@ -33,8 +33,17 @@
         cursor: pointer;
     }
 }
+.news-card__actions {
+    display: flex;
+    justify-content: space-between;
+}
 .post-card__url {
     margin-bottom: 1rem;
+}
+.post-card__user__avatar {
+    img {
+        width: 32px;
+    }
 }
 @media screen and (max-width: 500px) {
     .post-card {

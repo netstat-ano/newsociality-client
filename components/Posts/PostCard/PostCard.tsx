@@ -19,6 +19,7 @@ import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
 import useOutsideClick from "../../../hooks/use-outside-click";
 import ContextMenu from "../../UI/ContextMenu/ContextMenu";
+import AnimatedContextMenu from "../../UI/AnimatedContextMenu/AnimatedContextMenu";
 const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
@@ -120,7 +121,9 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                         <ModalPortal colorsScheme="error">{alert}</ModalPortal>
                     )}
                     <div className={styles["post-card__user"]}>
-                        <div className="center">
+                        <div
+                            className={`center ${styles["post-card__user__avatar"]}`}
+                        >
                             <Avatar
                                 src={`${process.env.API_URL}/${props.post.userId.avatarUrl}`}
                             />
@@ -193,50 +196,15 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                                     />
                                 )}
                             </div>
-                            <div ref={ref}>
-                                <FontAwesomeIcon
-                                    className={
-                                        styles["post-card__actions__options"]
-                                    }
-                                    onClick={onToggleOptions}
-                                    icon={faEllipsis}
-                                />
-
-                                {isOptionsVisable && (
-                                    <ContextMenu
-                                        isOptionsToggled={isOptionsToggled}
-                                        onAnimationEnd={() => {
-                                            if (!isOptionsToggled) {
-                                                setIsOptionsVisable(false);
-                                            }
-                                        }}
-                                        className={`
-                                        ${styles["post-card__context-menu"]}
-                                        ${
-                                            isOptionsToggled
-                                                ? styles[
-                                                      "post-card__context-menu-show"
-                                                  ]
-                                                : styles[
-                                                      "post-card__context-menu-hide"
-                                                  ]
-                                        }
-                                        `}
-                                    >
-                                        <>
-                                            {userId === post.userId._id && (
-                                                <li
-                                                    onClick={
-                                                        onDeletePostHandler
-                                                    }
-                                                >
-                                                    Usuń wpis
-                                                </li>
-                                            )}
-                                        </>
-                                    </ContextMenu>
-                                )}
-                            </div>
+                            <AnimatedContextMenu>
+                                <>
+                                    {userId === post.userId._id && (
+                                        <li onClick={onDeletePostHandler}>
+                                            Usuń wpis
+                                        </li>
+                                    )}
+                                </>
+                            </AnimatedContextMenu>
                         </div>
                     </div>
 

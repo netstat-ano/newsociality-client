@@ -15,6 +15,7 @@ import useAlert from "../../../hooks/use-alert";
 import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
+import AnimatedContextMenu from "../../UI/AnimatedContextMenu/AnimatedContextMenu";
 const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     props
 ) => {
@@ -24,6 +25,7 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     );
     const [likes, setLikes] = useState(props.news.likes);
     const [alert, setAlert, stop] = useAlert(2000);
+    const userId = useAppSelector((state) => state.user.userId);
     const [likeStatus, setLikeStatus] = useState(false);
     const text = props.news.newsDescription!.split("\r");
     const parsedText: string[] = [];
@@ -36,7 +38,8 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
         let newElement = element.split(" ");
         postText.push(...newElement);
     }
-    const [news, setNews] = useState<PostDB>(
+
+    const [news, setNews] = useState<PostDB | undefined>(
         new PostDB(
             props.news.userId,
             props.news._id,
@@ -56,9 +59,18 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
     const onToggleCommentsHandler = () => {
         setIsCommentsShowed((prevState) => !prevState);
     };
+    const onDeletePostHandler = async () => {
+        if (news) {
+            const result = await news.delete(token!);
+            if (result.ok) {
+                console.log("post deleted");
+                setNews(undefined);
+            }
+        }
+    };
     useEffect(() => {
         const preparePost = async () => {
-            if (props.news.createdAt) {
+            if (news && props.news.createdAt) {
                 const date = formatDate(props.news.createdAt);
                 if (token) {
                     const result = await news.checkLikeStatus(token!);
@@ -72,19 +84,24 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
         preparePost();
     }, []);
     const onLikeHandler = async () => {
-        const result = await news.like(token!);
-        if (result.ok) {
-            setLikes(result.likes);
-            if (result.message === "LIKED") {
-                setLikeStatus(true);
-            } else if (result.message === "DISLIKED") {
-                setLikeStatus(false);
+        if (news) {
+            const result = await news.like(token!);
+            if (result.ok) {
+                setLikes(result.likes);
+                if (result.message === "LIKED") {
+                    setLikeStatus(true);
+                } else if (result.message === "DISLIKED") {
+                    setLikeStatus(false);
+                }
+            } else {
+                setAlert(result.message);
+                stop();
             }
-        } else {
-            setAlert(result.message);
-            stop();
         }
     };
+    if (!news) {
+        return <></>;
+    }
     return (
         <Card className={styles["post-card"]}>
             <>
@@ -92,7 +109,9 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
                     <ModalPortal colorsScheme="error">{alert}</ModalPortal>
                 )}
                 <div className={styles["post-card__user"]}>
-                    <div className="center">
+                    <div
+                        className={`center ${styles["post-card__user__avatar"]} `}
+                    >
                         <Avatar
                             src={`${process.env.API_URL}/${props.news.userId.avatarUrl}`}
                         />
@@ -114,9 +133,11 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
                             likes={likes}
                             likeStatus={likeStatus}
                         />
-                        <Link href={`/news/${news._id}`}>
-                            <FontAwesomeIcon icon={faUpRightFromSquare} />
-                        </Link>
+                        {news && (
+                            <Link href={`/news/${news._id}`}>
+                                <FontAwesomeIcon icon={faUpRightFromSquare} />
+                            </Link>
+                        )}
                     </div>
                 </div>
                 <div className={styles["post-card__text"]}>
@@ -148,13 +169,27 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
                         }
                     })}
                     <div className="center"></div>
-                    <div data-testid="comments-wrapper">
-                        {!props.commentsDefaultShowed && (
-                            <FontAwesomeIcon
-                                onClick={onToggleCommentsHandler}
-                                icon={faComment}
-                            />
-                        )}
+                    <div
+                        className={styles["news-card__actions"]}
+                        data-testid="comments-wrapper"
+                    >
+                        <div>
+                            {!props.commentsDefaultShowed && (
+                                <FontAwesomeIcon
+                                    onClick={onToggleCommentsHandler}
+                                    icon={faComment}
+                                />
+                            )}
+                        </div>
+                        <AnimatedContextMenu>
+                            <>
+                                {news && userId === news.userId._id && (
+                                    <li onClick={onDeletePostHandler}>
+                                        Usuń wiadomość
+                                    </li>
+                                )}
+                            </>
+                        </AnimatedContextMenu>
                     </div>
                 </div>
                 {(isCommentsShowed || props.commentsDefaultShowed) && (

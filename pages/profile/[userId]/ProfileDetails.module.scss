@@ -3,9 +3,6 @@
     display: grid;
     width: 100%;
     grid: 1fr 1fr 1fr 1fr;
-    img {
-        width: 50%;
-    }
 }
 @media screen and (max-width: 625px) {
     .profile-details__tab {
@@ -26,6 +23,7 @@
 }
 .profile-details-userinfo__avatar {
     text-align: center;
+    width: 50%;
 }
 .profile-details__tab {
     text-align: center;
