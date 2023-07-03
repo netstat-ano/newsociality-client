@@ -9,11 +9,32 @@ import PostDB from "../../../models/PostDB";
 import PostCard from "../../../components/Posts/PostCard/PostCard";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import NewsCard from "../../../components/News/NewsCard/NewsCard";
+import TabElement from "../../../components/UI/TabElement/TabElement";
+import Tabs from "../../../components/UI/Tabs/Tabs";
+import { useAppSelector } from "../../../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
     const router = useRouter();
     const [posts, setPosts] = useState<PostDB[] | undefined>(undefined);
     const [isLastPage, setIsLastPage] = useState<boolean>(true);
+    const [followedTags, setFollowedTags] = useState<string[]>([]);
+    const userId = useAppSelector((state) => state.user.userId);
+    const token = useAppSelector((state) => state.user.token);
+    const username = useAppSelector((state) => state.user.username);
+    const avatarUrl = useAppSelector((state) => state.user.avatarUrl);
+    const itIsMyProfile = userId === router.query.userId;
+    const onDeleteFollowedTag = async (tag: string) => {
+        if (userId && username && avatarUrl && token) {
+            const result = await PostDB.followTag(tag, token);
+            if (result.ok) {
+                setFollowedTags((prevState) =>
+                    prevState.filter((value) => value !== tag)
+                );
+            }
+        }
+    };
     useEffect(() => {
         const fetchContent = async () => {
             if (router.query.tab === "posts") {
@@ -44,6 +65,16 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                 );
                 setPosts(result.posts);
                 setIsLastPage(result.lastPage);
+            } else if (router.query.tab === "followed-tags") {
+                if (token && userId) {
+                    const result = await UserDB.getFollowedTagsById(
+                        token,
+                        userId
+                    );
+                    if (result.ok) {
+                        setFollowedTags(result.tags);
+                    }
+                }
             } else {
                 setPosts(undefined);
             }
@@ -51,8 +82,16 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
         fetchContent();
     }, [router.query.tab, router.query.page]);
     return (
-        <div className={styles["profile-details"]}>
-            <div className={styles["profile-details__userinfo"]}>
+        <div
+            className={`${styles["profile-details"]} ${
+                itIsMyProfile ? styles["gd-5"] : styles["gd-4"]
+            }`}
+        >
+            <div
+                className={`${styles["profile-details__userinfo"]} ${
+                    itIsMyProfile ? styles["merge-5"] : styles["merge-4"]
+                }`}
+            >
                 <div className={styles["profile-details-userinfo__avatar"]}>
                     <PostImage src={`/${props.user.avatarUrl}`} />
                 </div>
@@ -104,7 +143,25 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                     Plusowane wiadomości
                 </Link>
             </div>
-            <div className={styles["profile-details__content"]}>
+            {userId === router.query.userId && (
+                <div className={styles["profile-details__tab"]}>
+                    <Link
+                        className={
+                            router.query.tab === "followed-tags"
+                                ? styles["active"]
+                                : ""
+                        }
+                        href={`/profile/${props.user._id}?tab=followed-tags&page=0`}
+                    >
+                        Obserwowane tagi
+                    </Link>
+                </div>
+            )}
+            <div
+                className={`${styles["profile-details__content"]} ${
+                    itIsMyProfile ? styles["merge-5"] : styles["merge-4"]
+                }`}
+            >
                 {(router.query.tab === "liked-posts" ||
                     router.query.tab === "posts") &&
                     posts &&
@@ -121,6 +178,26 @@ const ProfileDetails: NextPage<{ user: UserDB }> = (props) => {
                             return <NewsCard key={post._id} news={post} />;
                         }
                     })}
+                {router.query.tab === "followed-tags" && (
+                    <Tabs>
+                        {followedTags.map((tag) => (
+                            <TabElement>
+                                <>
+                                    #{tag}{" "}
+                                    <FontAwesomeIcon
+                                        onClick={() => {
+                                            onDeleteFollowedTag(tag);
+                                        }}
+                                        className={
+                                            styles["followed-tag-delete"]
+                                        }
+                                        icon={faXmark}
+                                    />
+                                </>
+                            </TabElement>
+                        ))}
+                    </Tabs>
+                )}
                 {posts && <Pagination lastPage={isLastPage} />}
             </div>
         </div>

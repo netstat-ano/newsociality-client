@@ -21,6 +21,32 @@ class UserDB {
         this.username = username;
         this.avatarUrl = avatarUrl;
     }
+    async deleteFromFollowed(tag: string, token: string) {
+        try {
+            const result = await axios.post(
+                "/auth/delete-followed-tag-by-user-id",
+                { tag },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return result.data as ResponseApi;
+        } catch (err: any) {
+            if (err instanceof AxiosError) {
+                return {
+                    ok: false,
+                    message: "",
+                } as ResponseApi;
+            } else {
+                return {
+                    ok: false,
+                    message: err.message,
+                } as ResponseApi;
+            }
+        }
+    }
     async changeAvatar(token: string, newAvatar: Blob) {
         const formData = new FormData();
         formData.append("id", this._id);

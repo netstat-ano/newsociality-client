@@ -2,11 +2,22 @@
 .profile-details {
     display: grid;
     width: 100%;
+}
+.gd5 {
+    grid: 1fr 1fr 1fr 1fr 1fr;
+}
+.gd4 {
     grid: 1fr 1fr 1fr 1fr;
+}
+.followed-tag-delete {
+    &:hover {
+        cursor: pointer;
+        color: $canceled-theme;
+    }
 }
 @media screen and (max-width: 625px) {
     .profile-details__tab {
-        grid-column: 1 / 5;
+        grid-column: 1 /6;
         margin: 1rem;
         background-color: $purple-theme;
         border-radius: 1rem;
@@ -17,7 +28,6 @@
     }
 }
 .profile-details__userinfo {
-    grid-column: 1 / 5;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -34,9 +44,14 @@
 }
 .profile-details__content {
     margin-top: 2rem;
-    grid-column: 1 / 5;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+.merge-5 {
+    grid-column: 1 /6;
+}
+.merge-4 {
+    grid-column: 1 /5;
 }
