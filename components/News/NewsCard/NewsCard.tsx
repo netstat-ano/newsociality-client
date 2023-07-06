@@ -188,6 +188,15 @@ const NewsCard: React.FC<{ news: PostDB; commentsDefaultShowed?: boolean }> = (
                                         Usuń wiadomość
                                     </li>
                                 )}
+                                <li
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(
+                                            `http://localhost:3000/news/${props.news._id}`
+                                        );
+                                    }}
+                                >
+                                    Skopiuj link do schowka
+                                </li>
                             </>
                         </AnimatedContextMenu>
                     </div>

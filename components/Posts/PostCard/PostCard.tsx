@@ -18,7 +18,6 @@ import ModalPortal from "../../Modal/Modal";
 import PostDB from "../../../models/PostDB";
 import Likes from "../../UI/Likes/Likes";
 import useOutsideClick from "../../../hooks/use-outside-click";
-import ContextMenu from "../../UI/ContextMenu/ContextMenu";
 import AnimatedContextMenu from "../../UI/AnimatedContextMenu/AnimatedContextMenu";
 const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     props
@@ -27,7 +26,6 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     const [isCommentsShowed, setIsCommentsShowed] = useState(
         props.commentsDefaultShowed ? true : false
     );
-    const [isOptionsVisable, setIsOptionsVisable] = useState(false);
     const [likes, setLikes] = useState(props.post.likes);
     const [alert, setAlert, stop] = useAlert(2000);
     const [likeStatus, setLikeStatus] = useState(false);
@@ -39,12 +37,6 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
     const parsedText: string[] = [];
     const postText: string[] = [];
     const userId = useAppSelector((state) => state.user.userId);
-    const onToggleOptions = () => {
-        if (!isOptionsVisable) {
-            setIsOptionsVisable(true);
-        }
-        setIsOptionsToggled((prevState) => !prevState);
-    };
     for (let element of text) {
         let newElement = `${element}\r`;
         parsedText.push(newElement);
@@ -203,6 +195,17 @@ const PostCard: React.FC<{ post: PostDB; commentsDefaultShowed?: boolean }> = (
                                             Usuń wpis
                                         </li>
                                     )}
+                                    {
+                                        <li
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(
+                                                    `http://localhost:3000/post/${props.post._id}`
+                                                );
+                                            }}
+                                        >
+                                            Skopiuj link do schowka
+                                        </li>
+                                    }
                                 </>
                             </AnimatedContextMenu>
                         </div>

@@ -41,7 +41,13 @@ const AnimatedContextMenu: React.FC<{ children: JSX.Element }> = (props) => {
                                         }
                                         `}
                 >
-                    <>{props.children}</>
+                    <div
+                        onClick={() => {
+                            setIsOptionsToggled(false);
+                        }}
+                    >
+                        {props.children}
+                    </div>
                 </ContextMenu>
             )}
         </div>
